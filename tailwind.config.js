@@ -21,6 +21,8 @@ module.exports = {
         'deep-orange': '#F2994A',
         'soft-gray': '#F2F2F2',
         'dark-charcoal': '#333333',
+        background: "var(--background)",
+        foreground: "var(--foreground)",
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
