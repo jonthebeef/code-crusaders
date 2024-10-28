@@ -1,12 +1,14 @@
 {
   "name": "code-crusaders-rebuild",
   "version": "0.1.0",
-  "private": true,
+  "engines": {
+    "node": ">=18.18.0"
+  },
   "scripts": {
     "dev": "next dev",
-    "build": "next build && cp -r public out/code-crusaders",
+    "build": "next build",
     "start": "next start",
-    "lint": "next lint",
+    "lint": "next lint"
     "export": "next export",
     "deploy": "next build && next export && touch out/.nojekyll && gh-pages -d out -t true"
   },

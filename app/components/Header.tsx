@@ -22,7 +22,7 @@ const Header: React.FC = () => {
         <nav className="flex justify-between items-center">
           <Link href="/" className="flex items-center">
             <Image
-              src="/logo.svg"
+              src="/code-crusaders/logo.svg"
               alt="Code Crusaders Logo"
               width={160}
               height={64}
