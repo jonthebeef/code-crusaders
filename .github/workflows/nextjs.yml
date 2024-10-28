@@ -23,14 +23,12 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: "18"  # Updated to use Node.js 18
+          node-version: "18"
           cache: 'npm'
       - name: Install dependencies
         run: npm ci
       - name: Build with Next.js
-        run: npm run build
-      - name: Static HTML export with Next.js
-        run: npm run export
+        run: npm run build  # No need for `npm run export`
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1
         with:
