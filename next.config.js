@@ -3,6 +3,7 @@ const nextConfig = {
   output: 'export',
   images: {
     unoptimized: true,
+    path: '/code-crusaders',
   },
   basePath: '/code-crusaders',
   assetPrefix: '/code-crusaders/',
