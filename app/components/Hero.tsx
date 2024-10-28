@@ -12,7 +12,7 @@ const Hero: React.FC = () => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     console.log('Email submitted:', email)
-    alert('Thank you for your interest! We\'ll be in touch soon.')
+    alert('Thank you for your interest! We&apos;ll be in touch soon.')
     setEmail('')
   }
 
@@ -35,7 +35,7 @@ const Hero: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
               className="text-base sm:text-lg mb-6 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]"
             >
-              Ready to transform screen time into dream time? 💡 With Code Crusaders, your pre-teen will embark on an exciting journey to learn to code for kids through fun coding tutorials. They'll build their very own games while mastering JavaScript - the superhero language of the web! It's not just coding, it's creating their future, one line at a time! 🌟
+              Ready to transform screen time into dream time? 💡 With Code Crusaders, your pre-teen will embark on an exciting journey to learn to code for kids through fun coding tutorials. They&apos;ll build their very own games while mastering JavaScript - the superhero language of the web! It&apos;s not just coding, it&apos;s creating their future, one line at a time! 🌟
             </motion.p>
           </div>
           <div className="lg:w-1/2 xl:w-[45%] flex justify-center items-center">

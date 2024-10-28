@@ -11,7 +11,7 @@ const JavaScriptExplanation: React.FC = () => {
   const features = [
     { icon: Code, title: 'Easy as Pie', description: 'No confusing jargon here! JavaScript is super friendly for coding newbies, making it the perfect starting point for young minds.' },
     { icon: Zap, title: 'Instant Magic', description: 'Watch their eyes light up as their code comes to life right before their eyes! JavaScript provides immediate visual feedback.' },
-    { icon: Brain, title: 'Brain Boost', description: "Coding doesn't just teach tech - it supercharges problem-solving and creativity, essential skills for any future career." },
+    { icon: Brain, title: 'Brain Boost', description: "Coding doesn&apos;t just teach tech - it supercharges problem-solving and creativity, essential skills for any future career." },
   ]
 
   return (
@@ -31,7 +31,7 @@ const JavaScriptExplanation: React.FC = () => {
           transition={{ duration: 0.5, delay: 0.2 }}
           className={`${lexend.className} text-center mb-12 max-w-2xl mx-auto text-lg`}
         >
-          At Code Crusaders, we're all about teaching skills that matter - and JavaScript is the superhero of coding languages! It's perfect for making awesome, interactive games and so much more!
+          At Code Crusaders, we&apos;re all about teaching skills that matter - and JavaScript is the superhero of coding languages! It&apos;s perfect for making awesome, interactive games and so much more!
         </motion.p>
         <div className="flex flex-wrap justify-center gap-8">
           {features.map((feature, index) => (

@@ -33,7 +33,7 @@ const StemEducation: React.FC = () => {
               transition={{ duration: 0.5, delay: 0.2 }}
               className={`${lexend.className} mb-8 max-w-2xl`}
             >
-              In today's digital world, learning to code is more important than ever. Our game-building for kids program isn't just about fun (though it's a big part!). It's about equipping your pre-teen with valuable STEM skills that will serve them well into the future.
+              In today&apos;s digital world, learning to code is more important than ever. Our game-building for kids program isn&apos;t just about fun (though it&apos;s a big part!). It&apos;s about equipping your pre-teen with valuable STEM skills that will serve them well into the future.
             </motion.p>
             <ul className="space-y-6">
               {features.map((feature, index) => (
