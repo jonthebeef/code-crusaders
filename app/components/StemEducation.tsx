@@ -61,10 +61,11 @@ const StemEducation: React.FC = () => {
           >
             <div className="relative w-full md:w-[90%] h-[400px]">
             <Image
-                src="/children-coding.jpg"
+                src="/images/children-coding.jpg"
                 alt="Children excited about coding"
                 fill
                 className="rounded-lg shadow-lg object-cover"
+                loader={({ src }) => `/code-crusaders${src}`}
                 onError={(e) => console.error('Error loading image:', e)}
               />
             </div>
