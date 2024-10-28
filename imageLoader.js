@@ -1,6 +1,6 @@
 
 const imageLoader = ({ src }) => {
-  return `/code-crusaders${src}`;
+  return `http://jonthebeef.xyz/code-crusaders${src}`;
 };
 
 export default imageLoader;
