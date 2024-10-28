@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "next lint"
     "build": "next build",
-    "export": "next export",
+    "export": "next export"
     "deploy": "next build && next export && touch out/.nojekyll && gh-pages -d out -t true"
     
   },
