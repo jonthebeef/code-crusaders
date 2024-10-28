@@ -3,7 +3,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Lexend } from 'next/font/google'
-// import Image from 'next/image'
+import Image from 'next/image'
 
 const lexend = Lexend({ subsets: ['latin'] })
 
@@ -60,8 +60,8 @@ const StemEducation: React.FC = () => {
             className="w-full md:w-1/2 flex justify-end"
           >
             <div className="relative w-full md:w-[90%] h-[400px]">
-              <img
-                src={childrenCodingImage.src}
+            <Image
+                src="/children-coding.jpg"
                 alt="Children excited about coding"
                 fill
                 className="rounded-lg shadow-lg object-cover"
