@@ -5,6 +5,8 @@ const nextConfig = {
     unoptimized: true,
   },
   basePath: '/code-crusaders',
+  assetPrefix: '/code-crusaders/',
+}
 }
 
 module.exports = nextConfig
