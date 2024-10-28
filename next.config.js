@@ -5,6 +5,7 @@ const nextConfig = {
     unoptimized: true,
     loader: 'custom',
     loaderFile: './imageLoader.js',
+    path: '/code-crusaders',  // Ensure images use this path consistently
   },
   basePath: '/code-crusaders',
   assetPrefix: '/code-crusaders/',
@@ -27,4 +28,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+module.exports = nextConfig;

@@ -1,3 +1,5 @@
-export default function imageLoader({ src, width, quality }) {
-  return `/code-crusaders${src}?w=${width}&q=${quality || 75}`
+const imageLoader = ({ src }) => {
+  return `/code-crusaders${src}`;
 }
+
+export default imageLoader;
