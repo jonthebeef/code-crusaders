@@ -48,7 +48,7 @@ const StemEducation: React.FC = () => {
                   <div>
                     <h3 className={`${lexend.className} text-xl font-semibold mb-2 text-electric-blue`}>{feature.title}</h3>
                     <p>{feature.description}</p>
-                  </div>
+                  </div> 
                 </motion.li>
               ))}
             </ul>
