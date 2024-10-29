@@ -9,15 +9,37 @@ const lexend = Lexend({ subsets: ['latin'] })
 
 const Hero: React.FC = () => {
   const [email, setEmail] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [submitMessage, setSubmitMessage] = useState('')
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('Email submitted:', email)
-    alert('Thank you for your interest! We&apos;ll be in touch soon.')
-    
-    sendGTMEvent({ event: 'form_submission', type: 'hero_email' })
-    
-    setEmail('')
+    setIsSubmitting(true)
+    setSubmitMessage('')
+
+    try {
+      const response = await fetch('/api/subscribe', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email }),
+      })
+
+      const data = await response.json()
+
+      if (response.ok) {
+        setSubmitMessage('Thank you for your interest! We\'ll be in touch soon.')
+        sendGTMEvent({ event: 'form_submission', type: 'hero_email' })
+        setEmail('')
+      } else {
+        setSubmitMessage(data.error || 'An error occurred. Please try again.')
+      }
+    } catch {
+      setSubmitMessage('An error occurred. Please try again.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -65,6 +87,7 @@ const Hero: React.FC = () => {
                   required
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  aria-label="Email address"
                 />
                 <div className="flex items-start">
                   <input type="checkbox" id="gdpr_consent" className="mt-1 mr-2" required />
@@ -80,9 +103,15 @@ const Hero: React.FC = () => {
                   type="submit"
                   className={`${lexend.className} w-full bg-[#F2C94C] text-[#333333] font-bold py-2 px-4 rounded hover:bg-[#F2994A] hover:text-white transition-colors duration-300`}
                   onClick={() => sendGTMEvent({ event: 'button_click', type: 'get_free_tutorial' })}
+                  disabled={isSubmitting}
                 >
-                  Get Free Tutorial
+                  {isSubmitting ? 'Submitting...' : 'Get Free Tutorial'}
                 </motion.button>
+                {submitMessage && (
+                  <p className={`text-sm ${submitMessage.includes('error') ? 'text-red-500' : 'text-green-500'}`} role="alert">
+                    {submitMessage}
+                  </p>
+                )}
               </form>
             </motion.div>
           </div>
