@@ -38,6 +38,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Email is required' }, { status: 400 })
   }
 
+  if (typeof listId !== 'string') {
+    console.error('Mailchimp list ID is not a string')
+    return NextResponse.json({ error: 'Mailchimp list ID is not configured correctly' }, { status: 500 })
+  }
+
   try {
     console.log('Attempting to add member to list:', listId)
     const response = await mailchimp.lists.addListMember(listId, {
