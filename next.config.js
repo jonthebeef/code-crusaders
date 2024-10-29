@@ -1,13 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'export',
-  basePath: '/code-crusaders',
-  assetPrefix: '/code-crusaders',
+  output: 'standalone',
   trailingSlash: true,
   images: {
-    loader: 'imgix',  // Or you can omit this line entirely if not needed
-    path: 'https://jonthebeef.xyz/code-crusaders',
-    unoptimized: true,
+    unoptimized: true,  // Use Netlify’s image handling directly
   },
   webpack: (config, { isServer }) => {
     config.module.rules.push({
@@ -22,7 +18,6 @@ const nextConfig = {
         },
       ],
     });
-
     return config;
   },
 }
