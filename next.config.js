@@ -3,21 +3,24 @@ const nextConfig = {
   output: 'standalone',
   trailingSlash: true,
   images: {
-    unoptimized: true,  // Use Netlify’s image handling directly
+    unoptimized: true,  // Use Netlify's image handling directly
   },
   webpack: (config, { isServer }) => {
+    // SVG handling
     config.module.rules.push({
-      test: /\.(png|jpe?g|gif|svg)$/i,
-      use: [
-        {
-          loader: 'file-loader',
-          options: {
-            publicPath: '/_next',
-            name: 'static/media/[name].[hash].[ext]',
-          },
-        },
-      ],
+      test: /\.svg$/,
+      use: ['@svgr/webpack'],
     });
+
+    // Other image handling
+    config.module.rules.push({
+      test: /\.(png|jpe?g|gif)$/i,
+      type: 'asset',
+      generator: {
+        filename: 'static/media/[name].[hash][ext]',
+      },
+    });
+
     return config;
   },
 }

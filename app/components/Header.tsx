@@ -24,17 +24,11 @@ export default function Header() {
         <nav className="flex justify-between items-center">
           <Link href="/" className="flex items-center">
             <Image
-              src="/logo.svg"
+              src="/greenlogo.png"
               alt="Code Crusaders Logo"
               width={160}
-              height={64}
+              height={55}
               className="w-40 h-auto"
-              style={{
-                maxWidth: '100%',
-                height: 'auto'
-              }}
-              sizes="(max-width: 640px) 160px, 160px"
-              quality={100}
               priority
             />
           </Link>
