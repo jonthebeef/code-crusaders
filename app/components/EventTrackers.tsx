@@ -6,10 +6,10 @@ export function trackButtonClick(buttonType: string) {
   sendGTMEvent({ event: 'button_click', type: buttonType })
 }
 
-export function trackGameEvent(eventName: string, eventData?: Record<string, any>) {
+export function trackGameEvent(eventName: string, eventData?: Record<string, unknown>) {
   sendGTMEvent({ event: eventName, ...eventData })
 }
 
 export function trackFormSubmission(formType: string) {
   sendGTMEvent({ event: 'form_submission', type: formType })
-}
+} 

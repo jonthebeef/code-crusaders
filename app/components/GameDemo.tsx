@@ -71,6 +71,7 @@ export default function GameDemo() {
     let showingSequence = false
 
     function drawGrid() {
+      if (!ctx) return
       ctx.fillStyle = '#444'  // Solid dark grey background
       for (let i = 0; i < GRID_SIZE; i++) {
         for (let j = 0; j < GRID_SIZE; j++) {
@@ -82,6 +83,7 @@ export default function GameDemo() {
     }
 
     function drawCell(index: number, active: boolean) {
+      if (!ctx) return
       const x = (index % GRID_SIZE) * (CELL_SIZE + CELL_GAP)
       const y = Math.floor(index / GRID_SIZE) * (CELL_SIZE + CELL_GAP)
       if (active) {
@@ -125,7 +127,7 @@ export default function GameDemo() {
     }
 
     function handleClick(event: MouseEvent) {
-      if (showingSequence || gameState !== 'playing') return
+      if (showingSequence || gameState !== 'playing' || !canvas) return
 
       const rect = canvas.getBoundingClientRect()
       const x = event.clientX - rect.left
@@ -216,7 +218,7 @@ export default function GameDemo() {
             Check out this memory maze game - just one of the cool coding projects for kids your pre-teen could create with Code Crusaders!
           </p>
           <p className="text-white mb-4">
-            We teach kids to code games, allowing them to build, tweak, and make it their own. It's not just a game, it's a launchpad for their creativity! 🌠
+            We teach kids to code games, allowing them to build, tweak, and make it their own. It&apos;s not just a game, it&apos;s a launchpad for their creativity! 🌠
           </p>
         </motion.div>
         <div className={`w-full max-w-lg mx-auto p-4 ${pixelFont.className}`}>
