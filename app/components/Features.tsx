@@ -18,7 +18,7 @@ const Features: React.FC = () => {
     <section className="bg-[#F3F4F6] pt-16 pb-24 relative">
       <div className="absolute top-0 left-0 w-full h-[2px] bg-[#F3F4F6]"></div>
       <div className="container mx-auto px-4">
-        <h2 className={`${lexend.className} text-3xl font-bold text-center mb-12`}>
+        <h2 className={`${lexend.className} text-3xl font-bold text-center mb-12 text-gray-800`}>
           <span role="img" aria-label="Trophy">🏆</span> Why Join the Code Crusaders Squad? <span role="img" aria-label="Trophy">🏆</span>
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
@@ -34,8 +34,8 @@ const Features: React.FC = () => {
               }
             >
               <div className="text-4xl mb-4">{feature.icon}</div>
-              <h3 className={`${lexend.className} text-xl font-semibold mb-2`}>{feature.title}</h3>
-              <p>{feature.description}</p>
+              <h3 className={`${lexend.className} text-xl font-semibold mb-2 text-gray-800`}>{feature.title}</h3>
+              <p className="text-gray-600">{feature.description}</p>
             </motion.div>
           ))}
         </div>
