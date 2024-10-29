@@ -5,7 +5,7 @@ const nextConfig = {
   assetPrefix: '/code-crusaders',
   trailingSlash: true,
   images: {
-    loader: 'imgix',
+    loader: 'imgix',  // Or you can omit this line entirely if not needed
     path: 'https://jonthebeef.xyz/code-crusaders',
     unoptimized: true,
   },

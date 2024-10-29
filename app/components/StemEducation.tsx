@@ -61,7 +61,7 @@ const StemEducation: React.FC = () => {
           >
             <div className="relative w-full md:w-[90%] h-[400px]">
             <Image
-                src="/images/children-coding.jpg"
+                src="https://jonthebeef.xyz/code-crusaders/images/children-coding.jpg"
                 alt="Children excited about coding"
                 fill
                 className="rounded-lg shadow-lg object-cover"
