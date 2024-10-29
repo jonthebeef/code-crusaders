@@ -27,6 +27,7 @@ const Hero: React.FC = () => {
       })
 
       const data = await response.json()
+      console.log('API Response:', data)
 
       if (response.ok) {
         setSubmitMessage('Thank you for your interest! We\'ll be in touch soon.')
@@ -35,7 +36,8 @@ const Hero: React.FC = () => {
       } else {
         setSubmitMessage(data.error || 'An error occurred. Please try again.')
       }
-    } catch {
+    } catch (error) {
+      console.error('Fetch Error:', error)
       setSubmitMessage('An error occurred. Please try again.')
     } finally {
       setIsSubmitting(false)

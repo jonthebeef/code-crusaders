@@ -1,9 +1,18 @@
 import { NextResponse } from 'next/server'
 import mailchimp from '@mailchimp/mailchimp_marketing'
 
+const apiKey = process.env.MAILCHIMP_API_KEY
+const server = process.env.MAILCHIMP_SERVER_PREFIX
+const listId = process.env.MAILCHIMP_LIST_ID
+
+if (!apiKey || !server || !listId) {
+  console.error('Missing required environment variables')
+  throw new Error('Missing required environment variables')
+}
+
 mailchimp.setConfig({
-  apiKey: process.env.MAILCHIMP_API_KEY,
-  server: process.env.MAILCHIMP_SERVER_PREFIX,
+  apiKey: apiKey,
+  server: server,
 })
 
 export async function POST(request: Request) {
@@ -13,20 +22,17 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Email is required' }, { status: 400 })
   }
 
-  const listId = process.env.MAILCHIMP_LIST_ID
-
-  if (!listId) {
-    return NextResponse.json({ error: 'Mailchimp list ID is not configured' }, { status: 500 })
-  }
-
   try {
-    await mailchimp.lists.addListMember(listId, {
+    console.log('Attempting to add member to list:', listId)
+    const response = await mailchimp.lists.addListMember(listId as string, {
       email_address: email,
       status: 'subscribed',
     })
+    console.log('Mailchimp API response:', JSON.stringify(response, null, 2))
 
     return NextResponse.json({ success: true }, { status: 200 })
   } catch (error) {
+    console.error('Mailchimp API Error:', error)
     if (error instanceof Error) {
       return NextResponse.json({ error: error.message }, { status: 500 })
     }
