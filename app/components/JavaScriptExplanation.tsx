@@ -4,6 +4,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { Lexend } from 'next/font/google'
 import { Code, Zap, Brain } from 'lucide-react'
+import { sendGTMEvent } from '@next/third-parties/google'
 
 const lexend = Lexend({ subsets: ['latin'] })
 
@@ -41,6 +42,7 @@ const JavaScriptExplanation: React.FC = () => {
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.5, delay: index * 0.1 + 0.4 }}
               className="bg-white bg-opacity-10 backdrop-blur-lg p-6 rounded-lg shadow-lg w-full md:w-72 flex flex-col items-center text-center"
+              onClick={() => sendGTMEvent({ event: 'js_feature_click', feature: feature.title })}
             >
               <feature.icon className="w-12 h-12 mb-4 text-yellow-300" />
               <h3 className={`${lexend.className} text-xl font-semibold mb-4`}>{feature.title}</h3>

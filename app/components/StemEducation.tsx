@@ -4,6 +4,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { Lexend } from 'next/font/google'
 import Image from 'next/image'
+import { sendGTMEvent } from '@next/third-parties/google'
 
 const lexend = Lexend({ subsets: ['latin'] })
 
@@ -43,6 +44,7 @@ const StemEducation: React.FC = () => {
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ duration: 0.5, delay: index * 0.1 + 0.4 }}
                   className="flex items-start"
+                  onClick={() => sendGTMEvent({ event: 'stem_feature_click', feature: feature.title })}
                 >
                   <span className="text-4xl mr-4 text-vibrant-purple" role="img" aria-hidden="true">{feature.icon}</span>
                   <div>
@@ -61,11 +63,11 @@ const StemEducation: React.FC = () => {
           >
             <div className="relative w-full md:w-[90%] h-[400px]">
             <Image
-                src="/children-coding.jpg"  // Full absolute URL
+                src="/children-coding.jpg"
                 alt="Children excited about coding"
                 fill
                 className="rounded-lg shadow-lg object-cover"
-                // onError={(e) => console.error('Error loading image:', e)}
+                onClick={() => sendGTMEvent({ event: 'image_click', image: 'children_coding' })}
               />
             </div>
           </motion.div>

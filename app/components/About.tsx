@@ -3,6 +3,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Lexend } from 'next/font/google'
+import { sendGTMEvent } from '@next/third-parties/google'
 
 const lexend = Lexend({ subsets: ['latin'] })
 
@@ -34,6 +35,7 @@ const About: React.FC = () => {
           <a
             href="#contact"
             className={`${lexend.className} bg-neon-yellow text-dark-charcoal font-bold py-3 px-8 rounded-full hover:bg-deep-orange hover:text-white transition-colors duration-300`}
+            onClick={() => sendGTMEvent({ event: 'cta_click', type: 'join_adventure' })}
           >
             Join the Adventure!
           </a>

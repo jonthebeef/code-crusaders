@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Lexend } from 'next/font/google'
+import { sendGTMEvent } from '@next/third-parties/google'
 
 const lexend = Lexend({ subsets: ['latin'] })
 
@@ -13,6 +14,9 @@ const Hero: React.FC = () => {
     e.preventDefault()
     console.log('Email submitted:', email)
     alert('Thank you for your interest! We&apos;ll be in touch soon.')
+    
+    sendGTMEvent({ event: 'form_submission', type: 'hero_email' })
+    
     setEmail('')
   }
 
@@ -75,6 +79,7 @@ const Hero: React.FC = () => {
                   whileTap={{ scale: 0.95 }}
                   type="submit"
                   className={`${lexend.className} w-full bg-[#F2C94C] text-[#333333] font-bold py-2 px-4 rounded hover:bg-[#F2994A] hover:text-white transition-colors duration-300`}
+                  onClick={() => sendGTMEvent({ event: 'button_click', type: 'get_free_tutorial' })}
                 >
                   Get Free Tutorial
                 </motion.button>

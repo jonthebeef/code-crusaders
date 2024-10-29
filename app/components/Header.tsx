@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Lexend } from 'next/font/google'
+import { sendGTMEvent } from '@next/third-parties/google'
 
 const lexend = Lexend({ subsets: ['latin'] })
 
@@ -12,6 +13,7 @@ const Header: React.FC = () => {
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
+    sendGTMEvent({ event: 'menu_toggle', state: isMenuOpen ? 'closed' : 'opened' })
   }
 
   const navItems = ['Home', 'Features', 'Game Demo', 'About']
@@ -45,7 +47,10 @@ const Header: React.FC = () => {
                 <Link 
                   href={`#${item.toLowerCase().replace(' ', '-')}`} 
                   className="block px-4 lg:px-0 text-dark-charcoal hover:text-vibrant-purple transition-colors duration-300" 
-                  onClick={() => setIsMenuOpen(false)}
+                  onClick={() => {
+                    setIsMenuOpen(false)
+                    sendGTMEvent({ event: 'nav_click', item: item.toLowerCase().replace(' ', '_') })
+                  }}
                 >
                   {item}
                 </Link>

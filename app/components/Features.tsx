@@ -3,6 +3,7 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 import { Lexend } from 'next/font/google'
+import { sendGTMEvent } from '@next/third-parties/google'
 
 const lexend = Lexend({ subsets: ['latin'] })
 
@@ -28,6 +29,9 @@ const Features: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: index * 0.1 }}
               className="bg-white p-6 rounded-lg shadow-md"
+              onClick={() => 
+                sendGTMEvent({ event: 'feature_click', feature: feature.title })
+              }
             >
               <div className="text-4xl mb-4">{feature.icon}</div>
               <h3 className={`${lexend.className} text-xl font-semibold mb-2`}>{feature.title}</h3>
