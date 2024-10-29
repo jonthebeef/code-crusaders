@@ -63,6 +63,7 @@ const StemEducation: React.FC = () => {
             <Image
                 src="/children-coding.jpg"  // Full absolute URL
                 alt="Children excited about coding"
+                fill
                 className="rounded-lg shadow-lg object-cover"
                 // onError={(e) => console.error('Error loading image:', e)}
               />
