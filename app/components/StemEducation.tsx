@@ -48,7 +48,7 @@ const StemEducation: React.FC = () => {
                   <div>
                     <h3 className={`${lexend.className} text-xl font-semibold mb-2 text-electric-blue`}>{feature.title}</h3>
                     <p>{feature.description}</p>
-                  </div> 
+                  </div>
                 </motion.li>
               ))}
             </ul>
@@ -61,7 +61,7 @@ const StemEducation: React.FC = () => {
           >
             <div className="relative w-full md:w-[90%] h-[400px]">
             <Image
-                src="/children-coding.jpg"
+                src="http://jonthebeef.xyz/code-crusaders/images/children-coding.jpg"
                 alt="Children excited about coding"
                 fill
                 className="rounded-lg shadow-lg object-cover"
