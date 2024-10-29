@@ -69,6 +69,8 @@ export default function GameDemo() {
     let sequence: number[] = []
     let playerSequence: number[] = []
     let showingSequence = false
+    let lastTouchTime = 0
+    const TOUCH_COOLDOWN = 300 // Cooldown period in milliseconds
 
     function drawGrid() {
       if (!ctx) return
@@ -126,12 +128,9 @@ export default function GameDemo() {
       }, START_GAME_DELAY)
     }
 
-    function handleClick(event: MouseEvent) {
-      if (showingSequence || gameState !== 'playing' || !canvas) return
+    function handleInput(x: number, y: number) {
+      if (showingSequence || gameState !== 'playing') return
 
-      const rect = canvas.getBoundingClientRect()
-      const x = event.clientX - rect.left
-      const y = event.clientY - rect.top
       const col = Math.floor(x / (CELL_SIZE + CELL_GAP))
       const row = Math.floor(y / (CELL_SIZE + CELL_GAP))
       const index = row * GRID_SIZE + col
@@ -160,7 +159,30 @@ export default function GameDemo() {
       }
     }
 
+    function handleClick(event: MouseEvent) {
+      if (!canvas) return
+      const rect = canvas.getBoundingClientRect()
+      const x = event.clientX - rect.left
+      const y = event.clientY - rect.top
+      handleInput(x, y)
+    }
+
+    function handleTouch(event: TouchEvent) {
+      event.preventDefault()
+      if (!canvas) return
+      const currentTime = new Date().getTime()
+      if (currentTime - lastTouchTime < TOUCH_COOLDOWN) return
+      lastTouchTime = currentTime
+
+      const rect = canvas.getBoundingClientRect()
+      const touch = event.touches[0]
+      const x = touch.clientX - rect.left
+      const y = touch.clientY - rect.top
+      handleInput(x, y)
+    }
+
     canvas.addEventListener('click', handleClick)
+    canvas.addEventListener('touchstart', handleTouch, { passive: false })
     drawGrid()
 
     if (gameState === 'playing') {
@@ -169,6 +191,7 @@ export default function GameDemo() {
 
     return () => {
       canvas.removeEventListener('click', handleClick)
+      canvas.removeEventListener('touchstart', handleTouch)
     }
   }, [gameState, score])
 
