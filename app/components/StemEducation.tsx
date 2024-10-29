@@ -8,7 +8,9 @@ export default function StemEducation() {
         alt="Children excited about coding"
         className="rounded-lg shadow-lg object-cover"
       />
-      <p className="mt-4 text-center text-lg text-gray-700">
+      <p className="mt-4 text-center text-lg text-black">
+        I WANT TO SEE THIS CHANGE.
+
         Inspiring the next generation of coders with hands-on learning.
       </p>
     </div>
