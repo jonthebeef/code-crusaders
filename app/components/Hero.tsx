@@ -9,6 +9,8 @@ const lexend = Lexend({ subsets: ['latin'] })
 
 const Hero: React.FC = () => {
   const [email, setEmail] = useState('')
+  const [marketingConsent, setMarketingConsent] = useState(false)
+  const [termsConsent, setTermsConsent] = useState(false)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitMessage, setSubmitMessage] = useState('')
 
@@ -17,13 +19,19 @@ const Hero: React.FC = () => {
     setIsSubmitting(true)
     setSubmitMessage('')
 
+    if (!marketingConsent || !termsConsent) {
+      setSubmitMessage('Please agree to the privacy policy and terms and conditions.')
+      setIsSubmitting(false)
+      return
+    }
+
     try {
       const response = await fetch('/api/subscribe', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ email }),
+        body: JSON.stringify({ email, marketingConsent, termsConsent }),
       })
 
       const data = await response.json()
@@ -33,6 +41,8 @@ const Hero: React.FC = () => {
         setSubmitMessage('Thank you for your interest! We\'ll be in touch soon.')
         sendGTMEvent({ event: 'form_submission', type: 'hero_email' })
         setEmail('')
+        setMarketingConsent(false)
+        setTermsConsent(false)
       } else {
         setSubmitMessage(data.error || 'An error occurred. Please try again.')
       }
@@ -92,11 +102,25 @@ const Hero: React.FC = () => {
                   aria-label="Email address"
                 />
                 <div className="flex items-start">
-                  <input type="checkbox" id="gdpr_consent" className="mt-1 mr-2" required />
+                  <input 
+                    type="checkbox" 
+                    id="gdpr_consent" 
+                    className="mt-1 mr-2" 
+                    checked={marketingConsent}
+                    onChange={(e) => setMarketingConsent(e.target.checked)}
+                    required 
+                  />
                   <label htmlFor="gdpr_consent" className="text-sm">I consent to receive marketing emails and agree to the privacy policy.</label>
                 </div>
                 <div className="flex items-start">
-                  <input type="checkbox" id="terms_consent" className="mt-1 mr-2" required />
+                  <input 
+                    type="checkbox" 
+                    id="terms_consent" 
+                    className="mt-1 mr-2" 
+                    checked={termsConsent}
+                    onChange={(e) => setTermsConsent(e.target.checked)}
+                    required 
+                  />
                   <label htmlFor="terms_consent" className="text-sm">I agree to the terms and conditions.</label>
                 </div>
                 <motion.button

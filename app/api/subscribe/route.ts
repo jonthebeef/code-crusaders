@@ -24,18 +24,23 @@ export async function POST(request: Request) {
   console.log('Received POST request')
   
   let email: string
+  let marketingConsent: boolean
+  let termsConsent: boolean
+
   try {
     const body = await request.json()
     email = body.email
-    console.log('Parsed email:', email)
+    marketingConsent = body.marketingConsent
+    termsConsent = body.termsConsent
+    console.log('Parsed data:', { email, marketingConsent, termsConsent })
   } catch (error) {
     console.error('Error parsing request body:', error)
     return NextResponse.json({ error: 'Invalid request body' }, { status: 400 })
   }
 
-  if (!email) {
-    console.error('Email is required but not provided')
-    return NextResponse.json({ error: 'Email is required' }, { status: 400 })
+  if (!email || typeof marketingConsent !== 'boolean' || typeof termsConsent !== 'boolean') {
+    console.error('Invalid form data')
+    return NextResponse.json({ error: 'Invalid form data' }, { status: 400 })
   }
 
   if (typeof listId !== 'string') {
@@ -48,6 +53,10 @@ export async function POST(request: Request) {
     const response = await mailchimp.lists.addListMember(listId, {
       email_address: email,
       status: 'subscribed',
+      merge_fields: {
+        MMERGE1: marketingConsent ? 'YES' : 'NO',
+        MMERGE2: termsConsent ? 'YES' : 'NO',
+      },
     })
     console.log('Mailchimp API response:', JSON.stringify(response, null, 2))
 
