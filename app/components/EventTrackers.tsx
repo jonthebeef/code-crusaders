@@ -1,36 +1,21 @@
 'use client'
 
 import { sendGTMEvent } from '@next/third-parties/google'
-import { Button } from '@/components/ui/button'
 
-export function SubscriptionButton() {
-  return (
-    <Button
-      onClick={() => sendGTMEvent({ event: 'subscription_click', category: 'engagement', label: '10% off subscription' })}
-    >
-      Get 10% Off Subscription
-    </Button>
-  )
+export function trackSubscription() {
+  sendGTMEvent({ event: 'subscription_click' })
 }
 
-export function TutorialStartButton() {
-  return (
-    <Button
-      onClick={() => sendGTMEvent({ event: 'tutorial_start', category: 'learning', label: 'Free Game-Building Tutorial' })}
-    >
-      Start Free Tutorial
-    </Button>
-  )
+export function trackTutorialStart() {
+  sendGTMEvent({ event: 'tutorial_start' })
 }
 
-export function GameDemoButton() {
-  return (
-    <Button
-      onClick={() => sendGTMEvent({ event: 'demo_start', category: 'engagement', label: 'Game Demo' })}
-    >
-      Try Game Demo
-    </Button>
-  )
+// Add more tracking functions as needed
+
+export function trackFormSubmission(formType: string) {
+  sendGTMEvent({ event: 'form_submission', type: formType })
 }
 
-// You can create similar components for other trackable events
+export function trackButtonClick(buttonType: string) {
+  sendGTMEvent({ event: 'button_click', type: buttonType })
+}
