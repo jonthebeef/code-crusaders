@@ -56,9 +56,9 @@ const Hero: React.FC = () => {
 
   return (
     <section id="home" className="relative bg-gradient-to-br from-[#9B51E0] via-[#4C9AFF] to-[#27AE60] text-white">
-      <div className="container mx-auto px-4 pt-20 pb-32">
+      <div className="container mx-auto px-4 pt-10 pb-16 sm:pt-20 sm:pb-32">
         <div className="flex flex-col lg:flex-row items-stretch lg:justify-between">
-          <div className="lg:w-1/2 xl:w-[45%] mb-8 lg:mb-0 flex flex-col justify-center">
+          <div className="lg:w-1/2 xl:w-[45%] mb-4 lg:mb-0 flex flex-col justify-center">
             <motion.h1
               initial={{ opacity: 0, y: -50 }}
               animate={{ opacity: 1, y: 0 }}
@@ -71,7 +71,7 @@ const Hero: React.FC = () => {
               initial={{ opacity: 0, y: 50 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className="text-base sm:text-lg mb-6 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]"
+              className="text-base sm:text-lg mb-3 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]"
             >
               Ready to transform screen time into dream time? 💡 With Code Crusaders, your pre-teen will embark on an exciting journey to learn to code for kids through fun coding tutorials. They&apos;ll build their very own games while mastering JavaScript - the superhero language of the web! It&apos;s not just coding, it&apos;s creating their future, one line at a time! 🌟
             </motion.p>
