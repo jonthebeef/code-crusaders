@@ -32,6 +32,4 @@ const WaveDivider: React.FC<WaveDividerProps> = ({ topColor = '#ffffff', bottomC
   )
 }
 
-export default Wav
-
-eDivider
+export default WaveDivider
