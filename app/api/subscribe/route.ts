@@ -5,6 +5,11 @@ const apiKey = process.env.MAILCHIMP_API_KEY
 const server = process.env.MAILCHIMP_SERVER_PREFIX
 const listId = process.env.MAILCHIMP_LIST_ID
 
+console.log('Environment variables:')
+console.log('MAILCHIMP_API_KEY:', apiKey ? 'Set' : 'Not set')
+console.log('MAILCHIMP_SERVER_PREFIX:', server)
+console.log('MAILCHIMP_LIST_ID:', listId)
+
 if (!apiKey || !server || !listId) {
   console.error('Missing required environment variables')
   throw new Error('Missing required environment variables')
@@ -16,15 +21,26 @@ mailchimp.setConfig({
 })
 
 export async function POST(request: Request) {
-  const { email } = await request.json()
+  console.log('Received POST request')
+  
+  let email: string
+  try {
+    const body = await request.json()
+    email = body.email
+    console.log('Parsed email:', email)
+  } catch (error) {
+    console.error('Error parsing request body:', error)
+    return NextResponse.json({ error: 'Invalid request body' }, { status: 400 })
+  }
 
   if (!email) {
+    console.error('Email is required but not provided')
     return NextResponse.json({ error: 'Email is required' }, { status: 400 })
   }
 
   try {
     console.log('Attempting to add member to list:', listId)
-    const response = await mailchimp.lists.addListMember(listId as string, {
+    const response = await mailchimp.lists.addListMember(listId, {
       email_address: email,
       status: 'subscribed',
     })
