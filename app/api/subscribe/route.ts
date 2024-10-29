@@ -13,8 +13,14 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: 'Email is required' }, { status: 400 })
   }
 
+  const listId = process.env.MAILCHIMP_LIST_ID
+
+  if (!listId) {
+    return NextResponse.json({ error: 'Mailchimp list ID is not configured' }, { status: 500 })
+  }
+
   try {
-    await mailchimp.lists.addListMember(process.env.MAILCHIMP_AUDIENCE_ID!, {
+    await mailchimp.lists.addListMember(listId, {
       email_address: email,
       status: 'subscribed',
     })
