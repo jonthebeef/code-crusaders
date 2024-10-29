@@ -1,14 +1,14 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   output: 'export',
-  images: {
-    unoptimized: true,
-    loader: 'custom',
-    loaderFile: './imageLoader.js',
-  unoptimized: true},
   basePath: '/code-crusaders',
-  assetPrefix: '/code-crusaders/',
+  assetPrefix: '/code-crusaders',
   trailingSlash: true,
+  images: {
+    loader: 'imgix',
+    path: 'https://jonthebeef.xyz/code-crusaders',
+    unoptimized: true,
+  },
   webpack: (config, { isServer }) => {
     config.module.rules.push({
       test: /\.(png|jpe?g|gif|svg)$/i,
@@ -27,4 +27,4 @@ const nextConfig = {
   },
 }
 
-module.exports = nextConfig
+module.exports = nextConfig;
