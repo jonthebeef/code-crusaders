@@ -8,7 +8,7 @@ import { sendGTMEvent } from '@next/third-parties/google'
 
 const lexend = Lexend({ subsets: ['latin'] })
 
-const Header: React.FC = () => {
+export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
 
   const toggleMenu = () => {
@@ -29,7 +29,11 @@ const Header: React.FC = () => {
               width={160}
               height={64}
               className="w-40 h-auto"
-              sizes="160px"
+              style={{
+                maxWidth: '100%',
+                height: 'auto'
+              }}
+              sizes="(max-width: 640px) 160px, 160px"
               quality={100}
               priority
             />
@@ -62,5 +66,3 @@ const Header: React.FC = () => {
     </header>
   )
 }
-
-export default Header
