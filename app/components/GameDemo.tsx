@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Press_Start_2P } from 'next/font/google'
 import { Twitter, Linkedin, Facebook } from 'lucide-react'
@@ -22,7 +22,7 @@ function TrianglePattern({
   lightColor = '#F3F4F6',
   darkColor = '#000000'
 }: TrianglePatternProps) {
-  const triangleWidth = height * Math.sqrt(3)  // Doubled the width
+  const triangleWidth = height * Math.sqrt(3)
 
   const createTrianglePath = (x: number, isUptooth: boolean) => {
     if (isUptooth) {
@@ -49,15 +49,111 @@ export default function GameDemo() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [gameState, setGameState] = useState<'ready' | 'playing' | 'gameOver'>('ready')
   const [score, setScore] = useState(0)
+  const sequenceRef = useRef<number[]>([])
+  const playerSequenceRef = useRef<number[]>([])
+  const showingSequenceRef = useRef(false)
+  const lastInputTimeRef = useRef(0)
 
-  const GRID_SIZE = 5;
-  const CELL_SIZE = 60;
-  const CELL_GAP = 10;
-  const CANVAS_SIZE = GRID_SIZE * CELL_SIZE + (GRID_SIZE - 1) * CELL_GAP;
-  const INITIAL_SEQUENCE_LENGTH = 3;
-  const SEQUENCE_INCREASE = 1;
-  const SEQUENCE_SHOW_INTERVAL = 600;
-  const START_GAME_DELAY = 1000;
+  const GRID_SIZE = 5
+  const CELL_SIZE = 60
+  const CELL_GAP = 10
+  const CANVAS_SIZE = GRID_SIZE * CELL_SIZE + (GRID_SIZE - 1) * CELL_GAP
+  const INITIAL_SEQUENCE_LENGTH = 3
+  const SEQUENCE_INCREASE = 1
+  const SEQUENCE_SHOW_INTERVAL = 600
+  const START_GAME_DELAY = 1000
+  const INPUT_COOLDOWN = 300
+
+  const drawGrid = useCallback((ctx: CanvasRenderingContext2D) => {
+    ctx.fillStyle = '#444'
+    for (let i = 0; i < GRID_SIZE; i++) {
+      for (let j = 0; j < GRID_SIZE; j++) {
+        const x = j * (CELL_SIZE + CELL_GAP)
+        const y = i * (CELL_SIZE + CELL_GAP)
+        ctx.fillRect(x, y, CELL_SIZE, CELL_SIZE)
+      }
+    }
+  }, [])
+
+  const drawCell = useCallback((ctx: CanvasRenderingContext2D, index: number, active: boolean) => {
+    const x = (index % GRID_SIZE) * (CELL_SIZE + CELL_GAP)
+    const y = Math.floor(index / GRID_SIZE) * (CELL_SIZE + CELL_GAP)
+    if (active) {
+      const gradient = ctx.createLinearGradient(x, y, x + CELL_SIZE, y + CELL_SIZE)
+      gradient.addColorStop(0, '#FF69B4')
+      gradient.addColorStop(1, '#8A2BE2')
+      ctx.fillStyle = gradient
+    } else {
+      ctx.fillStyle = '#444'
+    }
+    ctx.fillRect(x, y, CELL_SIZE, CELL_SIZE)
+  }, [])
+
+  const generateSequence = useCallback((length: number) => {
+    return Array.from({ length }, () => Math.floor(Math.random() * (GRID_SIZE * GRID_SIZE)))
+  }, [])
+
+  const showSequence = useCallback(async (ctx: CanvasRenderingContext2D) => {
+    showingSequenceRef.current = true
+    for (const cell of sequenceRef.current) {
+      drawCell(ctx, cell, true)
+      await new Promise(resolve => setTimeout(resolve, SEQUENCE_SHOW_INTERVAL / 2))
+      drawCell(ctx, cell, false)
+      await new Promise(resolve => setTimeout(resolve, SEQUENCE_SHOW_INTERVAL / 2))
+    }
+    showingSequenceRef.current = false
+  }, [drawCell])
+
+  const startNewGame = useCallback(() => {
+    sequenceRef.current = generateSequence(INITIAL_SEQUENCE_LENGTH)
+    playerSequenceRef.current = []
+    setScore(0)
+    setGameState('playing')
+    const ctx = canvasRef.current?.getContext('2d')
+    if (ctx) {
+      drawGrid(ctx)
+      setTimeout(() => showSequence(ctx), START_GAME_DELAY)
+    }
+    trackGameEvent('game_start')
+  }, [drawGrid, generateSequence, showSequence])
+
+  const handleInput = useCallback((x: number, y: number) => {
+    if (showingSequenceRef.current || gameState !== 'playing') return
+
+    const currentTime = Date.now()
+    if (currentTime - lastInputTimeRef.current < INPUT_COOLDOWN) return
+    lastInputTimeRef.current = currentTime
+
+    const col = Math.floor(x / (CELL_SIZE + CELL_GAP))
+    const row = Math.floor(y / (CELL_SIZE + CELL_GAP))
+    const index = row * GRID_SIZE + col
+
+    if (col < 0 || col >= GRID_SIZE || row < 0 || row >= GRID_SIZE) return
+
+    const ctx = canvasRef.current?.getContext('2d')
+    if (!ctx) return
+
+    playerSequenceRef.current.push(index)
+    drawCell(ctx, index, true)
+    setTimeout(() => drawCell(ctx, index, false), 300)
+
+    if (playerSequenceRef.current[playerSequenceRef.current.length - 1] !== sequenceRef.current[playerSequenceRef.current.length - 1]) {
+      setGameState('gameOver')
+      trackGameEvent('game_over', { score })
+      return
+    }
+
+    if (playerSequenceRef.current.length === sequenceRef.current.length) {
+      setScore(prevScore => {
+        const newScore = prevScore + 1
+        trackGameEvent('level_complete', { level: newScore })
+        return newScore
+      })
+      sequenceRef.current = [...sequenceRef.current, ...generateSequence(SEQUENCE_INCREASE)]
+      playerSequenceRef.current = []
+      setTimeout(() => showSequence(ctx), 1000)
+    }
+  }, [drawCell, gameState, generateSequence, score, showSequence])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -66,114 +162,15 @@ export default function GameDemo() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    let sequence: number[] = []
-    let playerSequence: number[] = []
-    let showingSequence = false
-    let lastTouchTime = 0
-    const TOUCH_COOLDOWN = 300 // Cooldown period in milliseconds
-
-    function drawGrid() {
-      if (!ctx) return
-      ctx.fillStyle = '#444'  // Solid dark grey background
-      for (let i = 0; i < GRID_SIZE; i++) {
-        for (let j = 0; j < GRID_SIZE; j++) {
-          const x = j * (CELL_SIZE + CELL_GAP)
-          const y = i * (CELL_SIZE + CELL_GAP)
-          ctx.fillRect(x, y, CELL_SIZE, CELL_SIZE)
-        }
-      }
-    }
-
-    function drawCell(index: number, active: boolean) {
-      if (!ctx) return
-      const x = (index % GRID_SIZE) * (CELL_SIZE + CELL_GAP)
-      const y = Math.floor(index / GRID_SIZE) * (CELL_SIZE + CELL_GAP)
-      if (active) {
-        const gradient = ctx.createLinearGradient(x, y, x + CELL_SIZE, y + CELL_SIZE)
-        gradient.addColorStop(0, '#FF69B4')  // Hot Pink
-        gradient.addColorStop(1, '#8A2BE2')  // Blue Violet
-        ctx.fillStyle = gradient
-      } else {
-        ctx.fillStyle = '#444'  // Solid dark grey for inactive cells
-      }
-      ctx.fillRect(x, y, CELL_SIZE, CELL_SIZE)
-    }
-
-    function generateSequence(length: number) {
-      return Array.from({ length }, () => Math.floor(Math.random() * (GRID_SIZE * GRID_SIZE)))
-    }
-
-    async function showSequence() {
-      showingSequence = true
-      for (const cell of sequence) {
-        drawCell(cell, true)
-        await new Promise(resolve => setTimeout(resolve, SEQUENCE_SHOW_INTERVAL / 2))
-        drawCell(cell, false)
-        await new Promise(resolve => setTimeout(resolve, SEQUENCE_SHOW_INTERVAL / 2))
-      }
-      showingSequence = false
-    }
-
-    function startNewGame() {
-      sequence = generateSequence(INITIAL_SEQUENCE_LENGTH)
-      playerSequence = []
-      setScore(0)
-      setGameState('playing')
-      drawGrid()
-
-      trackGameEvent('game_start')
-
-      setTimeout(() => {
-        showSequence()
-      }, START_GAME_DELAY)
-    }
-
-    function handleInput(x: number, y: number) {
-      if (showingSequence || gameState !== 'playing') return
-
-      const col = Math.floor(x / (CELL_SIZE + CELL_GAP))
-      const row = Math.floor(y / (CELL_SIZE + CELL_GAP))
-      const index = row * GRID_SIZE + col
-
-      if (col < 0 || col >= GRID_SIZE || row < 0 || row >= GRID_SIZE) return
-
-      playerSequence.push(index)
-      drawCell(index, true)
-      setTimeout(() => drawCell(index, false), 300)
-
-      if (playerSequence[playerSequence.length - 1] !== sequence[playerSequence.length - 1]) {
-        setGameState('gameOver')
-        trackGameEvent('game_over', { score })
-        return
-      }
-
-      if (playerSequence.length === sequence.length) {
-        setScore(prevScore => {
-          const newScore = prevScore + 1
-          trackGameEvent('level_complete', { level: newScore })
-          return newScore
-        })
-        sequence = [...sequence, ...generateSequence(SEQUENCE_INCREASE)]
-        playerSequence = []
-        setTimeout(showSequence, 1000)
-      }
-    }
-
-    function handleClick(event: MouseEvent) {
-      if (!canvas) return
+    const handleClick = (event: MouseEvent) => {
       const rect = canvas.getBoundingClientRect()
       const x = event.clientX - rect.left
       const y = event.clientY - rect.top
       handleInput(x, y)
     }
 
-    function handleTouch(event: TouchEvent) {
+    const handleTouch = (event: TouchEvent) => {
       event.preventDefault()
-      if (!canvas) return
-      const currentTime = new Date().getTime()
-      if (currentTime - lastTouchTime < TOUCH_COOLDOWN) return
-      lastTouchTime = currentTime
-
       const rect = canvas.getBoundingClientRect()
       const touch = event.touches[0]
       const x = touch.clientX - rect.left
@@ -183,7 +180,8 @@ export default function GameDemo() {
 
     canvas.addEventListener('click', handleClick)
     canvas.addEventListener('touchstart', handleTouch, { passive: false })
-    drawGrid()
+
+    drawGrid(ctx)
 
     if (gameState === 'playing') {
       startNewGame()
@@ -193,19 +191,19 @@ export default function GameDemo() {
       canvas.removeEventListener('click', handleClick)
       canvas.removeEventListener('touchstart', handleTouch)
     }
-  }, [gameState, score])
+  }, [drawGrid, gameState, handleInput, startNewGame])
 
-  const handleStartGame = () => {
+  const handleStartGame = useCallback(() => {
     setGameState('playing')
     trackButtonClick('start_game')
-  }
+  }, [])
 
-  const handlePlayAgain = () => {
+  const handlePlayAgain = useCallback(() => {
     setGameState('playing')
     trackButtonClick('play_again')
-  }
+  }, [])
 
-  const shareScore = (platform: 'twitter' | 'linkedin' | 'facebook') => {
+  const shareScore = useCallback((platform: 'twitter' | 'linkedin' | 'facebook') => {
     const message = `I just got ${score} on Memory Maze. A retro fun game pre-teens can build. Get the tutorial at codecrusaders.co.uk #kidcoders #codingforkids #codingisfun`
     const encodedMessage = encodeURIComponent(message)
     const urls = {
@@ -215,7 +213,7 @@ export default function GameDemo() {
     }
     window.open(urls[platform], '_blank')
     trackButtonClick(`share_score_${platform}`)
-  }
+  }, [score])
 
   return (
     <section id="game-demo" className="relative bg-black py-16">
