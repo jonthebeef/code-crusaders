@@ -18,11 +18,11 @@ interface TrianglePatternProps {
 }
 
 function TrianglePattern({
-  height = 60,
+  height = 30,
   lightColor = '#F3F4F6',
   darkColor = '#000000'
 }: TrianglePatternProps) {
-  const triangleWidth = height * Math.sqrt(3)
+  const triangleWidth = 60
 
   const createTrianglePath = (x: number, isUptooth: boolean) => {
     if (isUptooth) {
@@ -52,17 +52,19 @@ export default function GameDemo() {
   const sequenceRef = useRef<number[]>([])
   const playerSequenceRef = useRef<number[]>([])
   const showingSequenceRef = useRef(false)
-  const lastInputTimeRef = useRef(0)
+  const gameActiveRef = useRef(false)
+  const lastClickTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  const GRID_SIZE = 5
-  const CELL_SIZE = 60
-  const CELL_GAP = 10
-  const CANVAS_SIZE = GRID_SIZE * CELL_SIZE + (GRID_SIZE - 1) * CELL_GAP
-  const INITIAL_SEQUENCE_LENGTH = 3
-  const SEQUENCE_INCREASE = 1
-  const SEQUENCE_SHOW_INTERVAL = 600
-  const START_GAME_DELAY = 1000
-  const INPUT_COOLDOWN = 300
+  const GRID_SIZE = 5;
+  const CELL_SIZE = 60;
+  const CELL_GAP = 10;
+  const CANVAS_SIZE = GRID_SIZE * CELL_SIZE + (GRID_SIZE - 1) * CELL_GAP;
+  const INITIAL_SEQUENCE_LENGTH = 3;
+  const SEQUENCE_INCREASE = 1;
+  const SEQUENCE_SHOW_INTERVAL = 600;
+  const START_GAME_DELAY = 1000;
+  const CLICK_HIGHLIGHT_DURATION = 300;
+  const NEXT_SEQUENCE_DELAY = 1000;
 
   const drawGrid = useCallback((ctx: CanvasRenderingContext2D) => {
     ctx.fillStyle = '#444'
@@ -105,55 +107,76 @@ export default function GameDemo() {
   }, [drawCell])
 
   const startNewGame = useCallback(() => {
+    if (!canvasRef.current) return
+    const ctx = canvasRef.current.getContext('2d')
+    if (!ctx) return
+
     sequenceRef.current = generateSequence(INITIAL_SEQUENCE_LENGTH)
     playerSequenceRef.current = []
     setScore(0)
     setGameState('playing')
-    const ctx = canvasRef.current?.getContext('2d')
-    if (ctx) {
-      drawGrid(ctx)
-      setTimeout(() => showSequence(ctx), START_GAME_DELAY)
-    }
+    gameActiveRef.current = true
+    drawGrid(ctx)
+
     trackGameEvent('game_start')
+
+    setTimeout(() => {
+      showSequence(ctx)
+    }, START_GAME_DELAY)
   }, [drawGrid, generateSequence, showSequence])
 
-  const handleInput = useCallback((x: number, y: number) => {
-    if (showingSequenceRef.current || gameState !== 'playing') return
+  const handleClick = useCallback((event: MouseEvent) => {
+    if (showingSequenceRef.current || !gameActiveRef.current || !canvasRef.current) return
 
-    const currentTime = Date.now()
-    if (currentTime - lastInputTimeRef.current < INPUT_COOLDOWN) return
-    lastInputTimeRef.current = currentTime
+    const canvas = canvasRef.current
+    const ctx = canvas.getContext('2d')
+    if (!ctx) return
 
+    const rect = canvas.getBoundingClientRect()
+    const x = event.clientX - rect.left
+    const y = event.clientY - rect.top
     const col = Math.floor(x / (CELL_SIZE + CELL_GAP))
     const row = Math.floor(y / (CELL_SIZE + CELL_GAP))
     const index = row * GRID_SIZE + col
 
     if (col < 0 || col >= GRID_SIZE || row < 0 || row >= GRID_SIZE) return
 
-    const ctx = canvasRef.current?.getContext('2d')
-    if (!ctx) return
-
     playerSequenceRef.current.push(index)
     drawCell(ctx, index, true)
-    setTimeout(() => drawCell(ctx, index, false), 300)
 
-    if (playerSequenceRef.current[playerSequenceRef.current.length - 1] !== sequenceRef.current[playerSequenceRef.current.length - 1]) {
+    if (lastClickTimeoutRef.current) {
+      clearTimeout(lastClickTimeoutRef.current)
+    }
+
+    const isLastClick = playerSequenceRef.current.length === sequenceRef.current.length
+    const isCorrect = playerSequenceRef.current[playerSequenceRef.current.length - 1] === sequenceRef.current[playerSequenceRef.current.length - 1]
+
+    if (!isCorrect) {
+      gameActiveRef.current = false
       setGameState('gameOver')
       trackGameEvent('game_over', { score })
       return
     }
 
-    if (playerSequenceRef.current.length === sequenceRef.current.length) {
-      setScore(prevScore => {
-        const newScore = prevScore + 1
-        trackGameEvent('level_complete', { level: newScore })
-        return newScore
-      })
-      sequenceRef.current = [...sequenceRef.current, ...generateSequence(SEQUENCE_INCREASE)]
-      playerSequenceRef.current = []
-      setTimeout(() => showSequence(ctx), 1000)
-    }
-  }, [drawCell, gameState, generateSequence, score, showSequence])
+    lastClickTimeoutRef.current = setTimeout(() => {
+      if (gameActiveRef.current) {
+        drawCell(ctx, index, false)
+        
+        if (isLastClick) {
+          setScore(prevScore => prevScore + 1)
+          sequenceRef.current.push(generateSequence(SEQUENCE_INCREASE)[0])
+          playerSequenceRef.current = []
+          
+          setTimeout(() => {
+            if (gameActiveRef.current) {
+              drawGrid(ctx)
+              showSequence(ctx)
+            }
+          }, NEXT_SEQUENCE_DELAY)
+        }
+      }
+    }, CLICK_HIGHLIGHT_DURATION)
+  }, [generateSequence, score, showSequence, drawCell, drawGrid])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -162,36 +185,22 @@ export default function GameDemo() {
     const ctx = canvas.getContext('2d')
     if (!ctx) return
 
-    const handleClick = (event: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect()
-      const x = event.clientX - rect.left
-      const y = event.clientY - rect.top
-      handleInput(x, y)
-    }
-
-    const handleTouch = (event: TouchEvent) => {
-      event.preventDefault()
-      const rect = canvas.getBoundingClientRect()
-      const touch = event.touches[0]
-      const x = touch.clientX - rect.left
-      const y = touch.clientY - rect.top
-      handleInput(x, y)
-    }
-
     canvas.addEventListener('click', handleClick)
-    canvas.addEventListener('touchstart', handleTouch, { passive: false })
-
     drawGrid(ctx)
-
-    if (gameState === 'playing') {
-      startNewGame()
-    }
 
     return () => {
       canvas.removeEventListener('click', handleClick)
-      canvas.removeEventListener('touchstart', handleTouch)
+      if (lastClickTimeoutRef.current) {
+        clearTimeout(lastClickTimeoutRef.current)
+      }
     }
-  }, [drawGrid, gameState, handleInput, startNewGame])
+  }, [drawGrid, handleClick])
+
+  useEffect(() => {
+    if (gameState === 'playing') {
+      startNewGame()
+    }
+  }, [gameState, startNewGame])
 
   const handleStartGame = useCallback(() => {
     setGameState('playing')
@@ -218,7 +227,7 @@ export default function GameDemo() {
   return (
     <section id="game-demo" className="relative bg-black py-16">
       <div className="absolute top-0 left-0 w-full overflow-hidden">
-        <TrianglePattern height={60} lightColor="#F3F4F6" darkColor="#000000" />
+        <TrianglePattern height={30} lightColor="#F3F4F6" darkColor="#000000" />
       </div>
       <div className="container mx-auto px-4 pt-24">
         <motion.h2
