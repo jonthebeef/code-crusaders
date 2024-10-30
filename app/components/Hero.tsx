@@ -73,7 +73,7 @@ export default function Hero() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className={`${lexend.className} text-lg sm:text-xl lg:text-2xl font-semibold mb-4 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]`}
             >
-              Free Coding Game for Curious Kids - A Perfect Half-Term Activity! 
+              Free Game Coding Tutorial for Curious Kids - A Perfect Half-Term Activity! 
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 50 }}
