@@ -4,6 +4,7 @@ import React from 'react'
 import { motion } from 'framer-motion'
 import { Lexend } from 'next/font/google'
 import Image from 'next/image'
+import Link from 'next/link'
 import { sendGTMEvent } from '@next/third-parties/google'
 
 const lexend = Lexend({ subsets: ['latin'] })
@@ -72,6 +73,24 @@ const StemEducation: React.FC = () => {
             </div>
           </motion.div>
         </div>
+        
+        <motion.div 
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, delay: 0.8 }}
+          className="text-center mt-16"
+        >
+          <p className="text-xl mb-6 text-gray-800">Ready to start the adventure? Sign up for your free coding tutorial!</p>
+          <Link 
+            href="#signup"
+            className="inline-block px-8 py-4 text-lg font-semibold text-white rounded-lg bg-gradient-to-r from-purple-500 via-blue-500 to-teal-500 hover:opacity-90 transition-opacity duration-200 shadow-lg"
+            onClick={() => 
+              sendGTMEvent({ event: 'cta_click', action: 'get_started' })
+            }
+          >
+            Get Free Tutorial
+          </Link>
+        </motion.div>
       </div>
     </section>
   )

@@ -11,8 +11,8 @@ const lexend = Lexend({ subsets: ['latin'] })
 const Features: React.FC = () => {
   const features = [
     { icon: '🎮', title: 'Level Up Your Screen Time!', description: 'Game-making made easy! Kids dive into game creation, solve puzzles, and tackle coding challenges with tutorials that keep them hooked and learning.' },
-    { icon: '🌍', title: 'A Digital-Only Adventure', description: 'No piles of boxes like other subscriptions! Fresh coding adventures arrive monthly in your inbox – all the fun, none of the clutter, and perfect for curious minds.' },
-    { icon: '🚀', title: 'Skills for Tomorrow', description: 'Get ahead with coding skills! Kids spark curiosity and build problem-solving superpowers by learning JavaScript – the language of the web – giving them a head start on skills they&apos;ll use in the future.' },
+    { icon: '🌍', title: 'A Digital-Only Adventure', description: 'No piles of boxes like other subscriptions! Fresh coding adventures arrive monthly in your inbox - all the fun, none of the clutter, and perfect for curious minds.' },
+    { icon: '🚀', title: 'Skills for Tomorrow', description: 'Get ahead with coding skills! Kids spark curiosity and build problem-solving superpowers by learning JavaScript - the language of the web - giving them a head start on skills they will use in the future.' },
   ]
 
   return (
@@ -50,7 +50,7 @@ const Features: React.FC = () => {
         </div>
         
         <div className="text-center">
-          <p className="text-xl mb-6">Ready to start the adventure? Sign up for your free coding tutorial!</p>
+          <p className="text-xl mb-6 text-gray-800">Ready to start the adventure? Sign up for your free coding tutorial!</p>
           <Link 
             href="#signup"
             className="inline-block px-8 py-4 text-lg font-semibold text-white rounded-lg bg-gradient-to-r from-purple-500 via-blue-500 to-teal-500 hover:opacity-90 transition-opacity duration-200 shadow-lg"
