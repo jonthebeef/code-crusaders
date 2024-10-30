@@ -48,3 +48,98 @@ body {
     padding-right: 2rem;
   }
 }
+
+/* Tutorial-specific styles */
+.tutorial-code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+}
+
+.tutorial-content pre {
+  margin: 0;
+  padding: 0;
+}
+
+/* Syntax highlighting for code blocks */
+.tutorial-content .token.comment,
+.tutorial-content .token.prolog,
+.tutorial-content .token.doctype,
+.tutorial-content .token.cdata {
+  color: #8292a2;
+}
+
+.tutorial-content .token.punctuation {
+  color: #24292e;
+}
+
+.tutorial-content .token.namespace {
+  opacity: .7;
+}
+
+.tutorial-content .token.property,
+.tutorial-content .token.tag,
+.tutorial-content .token.constant,
+.tutorial-content .token.symbol,
+.tutorial-content .token.deleted {
+  color: #f92672;
+}
+
+.tutorial-content .token.boolean,
+.tutorial-content .token.number {
+  color: #ae81ff;
+}
+
+.tutorial-content .token.selector,
+.tutorial-content .token.attr-name,
+.tutorial-content .token.string,
+.tutorial-content .token.char,
+.tutorial-content .token.builtin,
+.tutorial-content .token.inserted {
+  color: #a6e22e;
+}
+
+.tutorial-content .token.operator,
+.tutorial-content .token.entity,
+.tutorial-content .token.url,
+.tutorial-content .language-css .token.string,
+.tutorial-content .style .token.string {
+  color: #f8f8f2;
+}
+
+.tutorial-content .token.atrule,
+.tutorial-content .token.attr-value,
+.tutorial-content .token.keyword {
+  color: #e96900;
+}
+
+.tutorial-content .token.function,
+.tutorial-content .token.class-name {
+  color: #dd4a68;
+}
+
+.tutorial-content .token.regex,
+.tutorial-content .token.important,
+.tutorial-content .token.variable {
+  color: #e90;
+}
+
+.tutorial-content .token.important,
+.tutorial-content .token.bold {
+  font-weight: bold;
+}
+
+.tutorial-content .token.italic {
+  font-style: italic;
+}
+
+/* Override any dark mode styles for code blocks to ensure readability */
+.tutorial-content pre[class*="language-"] {
+  background: #f6f8fa;
+  color: #24292e;
+  margin: 0;
+  padding: 1rem;
+  border-radius: 0.5rem;
+}
+
+.tutorial-content code[class*="language-"] {
+  text-shadow: none;
+}
