@@ -73,7 +73,7 @@ export default function Hero() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className={`${lexend.className} text-lg sm:text-xl lg:text-2xl font-semibold mb-4 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]`}
             >
-              Free Game Coding Tutorial for Curious Kids - A Perfect Half-Term Activity! 
+              Free Coding Tutorial for Curious Kids - A Perfect Half-Term Activity! 
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 50 }}
@@ -100,7 +100,7 @@ export default function Hero() {
               <p className={`${lexend.className} mb-4 font-bold`}>Keep the kids engaged for hours this half term, plus:</p>
               <ul className={`${lexend.className} list-disc list-inside mb-6`}>
                 <li><strong>Instant Access</strong> to a free coding tutorial 🎮</li>
-                <li><strong>Exclusive 10% Discount</strong> on annual gift subscriptions </li>
+                <li><strong>Exclusive 10% Discount</strong> on annual subscriptions (when we launch)</li>
                 <li><strong>Be the First to Know</strong> about our launch!</li>
               </ul>
               <form onSubmit={handleSubmit} className="space-y-4">
@@ -168,6 +168,32 @@ export default function Hero() {
             </motion.div>
           </div>
         </div>
+      </div>
+      <div className="absolute bottom-0 left-0 w-full h-[120px] overflow-hidden">
+        <svg className="absolute bottom-0 left-0 w-full h-auto" viewBox="0 0 1440 120" preserveAspectRatio="none">
+          <path 
+            d="M0,120 
+               C30,119,60,118,90,114
+               C120,110,150,103,180,98
+               C210,93,240,90,270,92
+               C300,94,330,101,360,105
+               C390,109,420,110,450,108
+               C480,106,510,101,540,97
+               C570,93,600,90,630,92
+               C660,94,690,101,720,105
+               C750,109,780,110,810,108
+               C840,106,870,101,900,97
+               C930,93,960,90,990,92
+               C1020,94,1050,101,1080,105
+               C1110,109,1140,110,1170,108
+               C1200,106,1230,101,1260,97
+               C1290,93,1320,90,1350,92
+               C1380,94,1410,101,1440,105
+               L1440,120 L0,120 Z" 
+            fill="#F3F4F6"
+          />
+        </svg>
+        <div className="absolute bottom-0 left-0 w-full h-[2px] bg-[#F3F4F6]"></div>
       </div>
     </section>
   )

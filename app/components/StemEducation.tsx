@@ -16,15 +16,15 @@ const StemEducation: React.FC = () => {
   ]
 
   return (
-    <section className="bg-[#F3F4F6] py-16">
+    <section className={`${lexend.className} bg-[#F3F4F6] py-16`}>
       <div className="container mx-auto px-4">
         <motion.h2
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className={`${lexend.className} text-3xl font-bold text-center mb-6 md:mb-12 text-gray-800`}
+          className="text-3xl font-bold text-center mb-6 md:mb-12 text-gray-800"
         >
-          STEM Education for Pre-Teens: Why It Matters
+          Why Coding Matters for Pre-Teens
         </motion.h2>
         <div className="flex flex-col md:flex-row items-start gap-8">
           <div className="w-full md:w-1/2">
@@ -32,9 +32,9 @@ const StemEducation: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, delay: 0.2 }}
-              className={`${lexend.className} mb-8 max-w-2xl text-gray-600`}
+              className="mb-8 max-w-2xl text-gray-600"
             >
-              In today&apos;s digital world, learning to code is more important than ever. Our game-building for kids program isn&apos;t just about fun (though it&apos;s a big part!). It&apos;s about equipping your pre-teen with valuable STEM skills that will serve them well into the future.
+              In a world driven by technology, coding isn&apos;t just essential; it&apos;s a game changer. Our game-building platform empowers pre-teens to create their own games and dive into coding while developing valuable digital skills. It&apos;s not just about enjoyment; it&apos;s about equipping them with the STEM skills they&apos;ll need to thrive in the future.
             </motion.p>
             <ul className="space-y-6">
               {features.map((feature, index) => (
@@ -48,7 +48,7 @@ const StemEducation: React.FC = () => {
                 >
                   <span className="text-4xl mr-4 text-vibrant-purple" role="img" aria-hidden="true">{feature.icon}</span>
                   <div>
-                    <h3 className={`${lexend.className} text-xl font-semibold mb-2 text-electric-blue`}>{feature.title}</h3>
+                    <h3 className="text-xl font-semibold mb-2 text-electric-blue">{feature.title}</h3>
                     <p className="text-gray-600">{feature.description}</p>
                   </div>
                 </motion.li>
@@ -62,7 +62,7 @@ const StemEducation: React.FC = () => {
             className="w-full md:w-1/2 flex justify-end"
           >
             <div className="relative w-full md:w-[90%] h-[400px]">
-            <Image
+              <Image
                 src="/children-coding.jpg"
                 alt="Children excited about coding"
                 fill
