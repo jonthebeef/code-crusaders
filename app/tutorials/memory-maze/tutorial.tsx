@@ -1,6 +1,7 @@
 'use client'
 
 import React from 'react'
+import { GettingStartedSection } from './components/sections/GettingStartedSection'
 import { HTMLSetupSection } from './components/sections/HTMLSetupSection'
 import { GameGridSection } from './components/sections/GameGridSection'
 import { HighlightingCellsSection } from './components/sections/HighlightingCellsSection'
@@ -18,6 +19,7 @@ export function MemoryMazeTutorial() {
         </div>
         
         <div className="p-12 space-y-24">
+          <GettingStartedSection />
           <HTMLSetupSection />
           <GameGridSection />
           <HighlightingCellsSection />
