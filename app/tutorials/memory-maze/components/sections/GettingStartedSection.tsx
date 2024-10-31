@@ -90,7 +90,7 @@ export function GettingStartedSection({ id, children, onView }: GettingStartedSe
                     <li>Open Finder</li>
                     <li>Click Applications</li>
                     <li>Find and open TextEdit</li>
-                    <li>Important: Go to TextEdit → Preferences and select "Plain Text"</li>
+                    <li>Important: Go to TextEdit → Format → select "Make Plain Text"</li>
                   </ul>
                 </li>
               </ul>

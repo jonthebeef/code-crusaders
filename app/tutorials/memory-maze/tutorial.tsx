@@ -20,7 +20,7 @@ export default function MemoryMazeTutorial() {
   }
 
   return (
-    <div className="min-h-screen bg-purple-50">
+    <div className="min-h-screen bg-white">
       <main className="w-full max-w-4xl mx-auto px-4 py-8">
         <div className="bg-yellow-200 p-4 md:p-8 rounded-xl mb-8">
           <h1 className="text-4xl md:text-5xl font-bold text-purple-600 flex items-center gap-2">
