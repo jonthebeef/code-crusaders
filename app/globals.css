@@ -59,6 +59,42 @@ body {
   padding: 0;
 }
 
+/* Improved text visibility for mobile */
+@media (max-width: 768px) {
+  body {
+    font-size: 16px;
+  }
+
+  h1 {
+    font-size: 1.75rem;
+  }
+
+  h2 {
+    font-size: 1.5rem;
+  }
+
+  h3 {
+    font-size: 1.25rem;
+  }
+
+  .text-purple-600 {
+    color: #5B21B6; /* darker purple for better contrast */
+  }
+
+  .text-gray-600 {
+    color: #4B5563; /* darker gray for better contrast */
+  }
+}
+
+/* Ensure text is always visible on light backgrounds */
+.text-purple-600 {
+  color: #5B21B6; /* darker purple for better contrast */
+}
+
+.text-gray-600 {
+  color: #4B5563; /* darker gray for better contrast */
+}
+
 /* Syntax highlighting for code blocks */
 .tutorial-content .token.comment,
 .tutorial-content .token.prolog,
@@ -142,4 +178,12 @@ body {
 
 .tutorial-content code[class*="language-"] {
   text-shadow: none;
+}
+
+/* Improved responsiveness for code blocks */
+@media (max-width: 768px) {
+  .tutorial-content pre[class*="language-"] {
+    font-size: 14px;
+    padding: 0.75rem;
+  }
 }
