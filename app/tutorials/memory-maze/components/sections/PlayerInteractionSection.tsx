@@ -1,6 +1,11 @@
 import React from 'react'
 import { CodeBlock, InlineCode } from '../shared'
 
+interface PlayerInteractionSectionProps {
+  id: string
+  children?: React.ReactNode
+}
+
 const jsUpdateScore = `// Function to update the score
 function updateScore() {
     document.getElementById('score').textContent = 'Score: ' + score;
@@ -36,14 +41,27 @@ function handleClick(event) {
 // Add click event listener to the canvas
 canvas.addEventListener('click', handleClick);`
 
-export function PlayerInteractionSection() {
+export function PlayerInteractionSection({ id, children }: PlayerInteractionSectionProps) {
   return (
-    <section className="space-y-8">
+    <section id={id} className="space-y-8">
       <h2 className="text-3xl font-bold text-blue-600 mb-6">Stage 5: Handling Player Clicks 👆</h2>
+
+      <div className="bg-purple-50 p-6 rounded-lg mb-8">
+        <h3 className="text-xl font-bold text-purple-800 mb-4">🎮 Time to Make the Game Interactive!</h3>
+        <div className="space-y-4">
+          <p className="text-lg">Now we're going to add the code that lets players interact with the game. Here's what to do:</p>
+          <ol className="list-decimal list-inside text-lg space-y-2">
+            <li>Open your <InlineCode>game.js</InlineCode> file</li>
+            <li>Go to the end of the file</li>
+            <li>Add each code block below, one at a time</li>
+            <li>After adding each block, save your file and refresh your web browser to test the game!</li>
+          </ol>
+        </div>
+      </div>
 
       <div className="space-y-12">
         <div>
-          <h3 className="text-2xl font-bold text-green-600 mb-4">Update Score Function</h3>
+          <h3 id="update-score" className="text-2xl font-bold text-green-600 mb-4">Update Score Function</h3>
           <CodeBlock code={jsUpdateScore} language="javascript" />
           <div className="mt-6 space-y-4">
             <p className="text-lg"><strong>What this function does:</strong></p>
@@ -54,7 +72,7 @@ export function PlayerInteractionSection() {
         </div>
 
         <div>
-          <h3 className="text-2xl font-bold text-green-600 mb-4">Handle Click Function</h3>
+          <h3 id="handle-click" className="text-2xl font-bold text-green-600 mb-4">Handle Click Function</h3>
           <CodeBlock code={jsHandleClick} language="javascript" />
           <div className="mt-6 space-y-4">
             <p className="text-lg"><strong>What this function does:</strong></p>
@@ -87,6 +105,10 @@ export function PlayerInteractionSection() {
           </ul>
         </div>
       </div>
+
+      {children}
     </section>
   )
 }
+
+export default PlayerInteractionSection

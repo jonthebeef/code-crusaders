@@ -1,8 +1,12 @@
 import React from 'react'
 
-export function CongratulationsSection() {
+interface CongratulationsSectionProps {
+  id: string
+}
+
+export function CongratulationsSection({ id }: CongratulationsSectionProps) {
   return (
-    <section className="space-y-8">
+    <section id={id} className="space-y-8">
       <h2 className="text-3xl font-bold text-blue-600 mb-6">Congratulations! 🎉</h2>
       <p className="mb-8 text-lg">You've built your very own memory game! Here are some ideas for further customisation:</p>
       

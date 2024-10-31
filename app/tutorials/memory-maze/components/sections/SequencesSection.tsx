@@ -1,6 +1,11 @@
 import React from 'react'
 import { CodeBlock, InlineCode } from '../shared'
 
+interface SequencesSectionProps {
+  id: string
+  children?: React.ReactNode // Made children optional
+}
+
 const jsGameVariables = `// Game variables
 let sequence = [];
 let playerSequence = [];
@@ -39,14 +44,27 @@ function startNewGame() {
 // Start the game
 startNewGame();`
 
-export function SequencesSection() {
+export function SequencesSection({ id, children }: SequencesSectionProps) {
   return (
-    <section className="space-y-8">
+    <section id={id} className="space-y-8">
       <h2 className="text-3xl font-bold text-blue-600 mb-6">Stage 4: Creating and Showing Sequences 🎭</h2>
+
+      <div className="bg-purple-50 p-6 rounded-lg mb-8">
+        <h3 className="text-xl font-bold text-purple-800 mb-4">🧠 Time to Add Game Logic!</h3>
+        <div className="space-y-4">
+          <p className="text-lg">Now we're going to add the core game logic. Here's what to do:</p>
+          <ol className="list-decimal list-inside text-lg space-y-2">
+            <li>Open your <InlineCode>game.js</InlineCode> file</li>
+            <li>Go to the end of the file</li>
+            <li>Add each code block below, one at a time</li>
+            <li>After adding each block, save your file and refresh your web browser to see what changes!</li>
+          </ol>
+        </div>
+      </div>
 
       <div className="space-y-12">
         <div>
-          <h3 className="text-2xl font-bold text-green-600 mb-4">Game Variables</h3>
+          <h3 id="game-variables" className="text-2xl font-bold text-green-600 mb-4">Game Variables</h3>
           <CodeBlock code={jsGameVariables} language="javascript" />
           <div className="mt-6 space-y-4">
             <p className="text-lg"><strong>What these variables do:</strong></p>
@@ -59,7 +77,7 @@ export function SequencesSection() {
         </div>
 
         <div>
-          <h3 className="text-2xl font-bold text-green-600 mb-4">Generate Sequence Function</h3>
+          <h3 id="generate-sequence" className="text-2xl font-bold text-green-600 mb-4">Generate Sequence Function</h3>
           <CodeBlock code={jsGenerateSequence} language="javascript" />
           <div className="mt-6 space-y-4">
             <p className="text-lg"><strong>What this function does:</strong></p>
@@ -71,7 +89,7 @@ export function SequencesSection() {
         </div>
 
         <div>
-          <h3 className="text-2xl font-bold text-green-600 mb-4">Show Sequence Function</h3>
+          <h3 id="show-sequence" className="text-2xl font-bold text-green-600 mb-4">Show Sequence Function</h3>
           <CodeBlock code={jsShowSequence} language="javascript" />
           <div className="mt-6 space-y-4">
             <p className="text-lg"><strong>What this function does:</strong></p>
@@ -85,7 +103,7 @@ export function SequencesSection() {
         </div>
 
         <div>
-          <h3 className="text-2xl font-bold text-green-600 mb-4">Start New Game Function</h3>
+          <h3 id="start-new-game" className="text-2xl font-bold text-green-600 mb-4">Start New Game Function</h3>
           <CodeBlock code={jsStartNewGame} language="javascript" />
           <div className="mt-6 space-y-4">
             <p className="text-lg"><strong>What this function does:</strong></p>
@@ -114,6 +132,10 @@ export function SequencesSection() {
           </ul>
         </div>
       </div>
+
+      {children}
     </section>
   )
 }
+
+export default SequencesSection
