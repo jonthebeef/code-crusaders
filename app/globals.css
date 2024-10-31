@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -24,6 +26,7 @@ body {
       rgb(var(--background-end-rgb))
     )
     rgb(var(--background-start-rgb));
+  font-family: 'Lexend', sans-serif;
 }
 
 .container {
@@ -185,5 +188,41 @@ body {
   .tutorial-content pre[class*="language-"] {
     font-size: 14px;
     padding: 0.75rem;
+  }
+}
+
+/* Ensure Lexend is used for all text */
+* {
+  font-family: 'Lexend', sans-serif;
+}
+
+/* Fix mobile Safari text visibility */
+@supports (-webkit-touch-callout: none) {
+  .text-purple-600,
+  .text-purple-700,
+  .text-green-600,
+  .text-blue-600,
+  .text-yellow-800 {
+    color: inherit;
+  }
+  
+  /* Restore specific colors where needed */
+  h1.text-purple-600 { color: #7C3AED; }
+  h2.text-purple-600 { color: #7C3AED; }
+  h2.text-blue-600 { color: #2563EB; }
+  h3.text-green-600 { color: #059669; }
+}
+
+/* Ensure proper content width on mobile */
+.max-w-full {
+  max-width: 100vw;
+  overflow-wrap: break-word;
+}
+
+/* Add padding for mobile */
+@media (max-width: 640px) {
+  .space-y-16 > * {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
   }
 }

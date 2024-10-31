@@ -25,7 +25,7 @@ module.exports = {
         foreground: "var(--foreground)",
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
+        sans: ['Lexend', 'Inter', 'sans-serif'],
         lexend: ['Lexend', 'sans-serif'],
       },
       backgroundImage: {
