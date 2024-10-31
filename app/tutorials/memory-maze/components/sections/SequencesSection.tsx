@@ -3,7 +3,8 @@ import { CodeBlock, InlineCode } from '../shared'
 
 interface SequencesSectionProps {
   id: string
-  children?: React.ReactNode // Made children optional
+  children?: React.ReactNode
+  onView: () => void
 }
 
 const jsGameVariables = `// Game variables
@@ -44,9 +45,33 @@ function startNewGame() {
 // Start the game
 startNewGame();`
 
-export function SequencesSection({ id, children }: SequencesSectionProps) {
+export function SequencesSection({ id, children, onView }: SequencesSectionProps) {
+  const sectionRef = React.useRef<HTMLElement>(null);
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          onView();
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, [onView]);
+
   return (
-    <section id={id} className="space-y-8">
+    <section id={id} ref={sectionRef} className="space-y-8">
       <h2 className="text-3xl font-bold text-blue-600 mb-6">Stage 4: Creating and Showing Sequences 🎭</h2>
 
       <div className="bg-purple-50 p-6 rounded-lg mb-8">

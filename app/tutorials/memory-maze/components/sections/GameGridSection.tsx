@@ -4,6 +4,7 @@ import { CodeBlock, InlineCode } from '../shared'
 interface GameGridSectionProps {
   id: string
   children?: React.ReactNode
+  onView: () => void
 }
 
 const gameGridCode = `// Constants for our game
@@ -38,9 +39,33 @@ function drawGrid() {
 // Call the function to draw the grid
 drawGrid();`
 
-export function GameGridSection({ id, children }: GameGridSectionProps) {
+export function GameGridSection({ id, children, onView }: GameGridSectionProps) {
+  const sectionRef = React.useRef<HTMLElement>(null);
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          onView();
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, [onView]);
+
   return (
-    <section id={id} className="space-y-6">
+    <section id={id} ref={sectionRef} className="space-y-6">
       <h2 className="text-3xl font-bold text-blue-600">Creating the Game Grid 🧩</h2>
       
       <div className="space-y-4">
@@ -98,7 +123,7 @@ export function GameGridSection({ id, children }: GameGridSectionProps) {
         </div>
 
         <div className="bg-green-100 p-4 rounded-lg">
-          <p className="text-lg font-bold text-green-800 mb-2">🌈 Customization Ideas:</p>
+          <p className="text-lg font-bold text-green-800 mb-2">🌈 Customisation Ideas:</p>
           <ul className="list-disc list-inside text-lg space-y-1 text-green-800">
             <li>Try changing the <InlineCode>GRID_SIZE</InlineCode> to make the game easier or harder.</li>
             <li>Experiment with different colors for the background and cells.</li>

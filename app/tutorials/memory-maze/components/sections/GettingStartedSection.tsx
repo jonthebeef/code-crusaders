@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useEffect, useRef } from 'react'
 
 interface GettingStartedSectionProps {
   id: string
   children?: React.ReactNode
+  onView: () => void
 }
 
 // Inline the InlineCode component
@@ -14,9 +15,33 @@ function InlineCode({ children }: { children: React.ReactNode }) {
   )
 }
 
-export function GettingStartedSection({ id, children }: GettingStartedSectionProps) {
+export function GettingStartedSection({ id, children, onView }: GettingStartedSectionProps) {
+  const sectionRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          onView();
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, [onView]);
+
   return (
-    <section id={id} className="space-y-6">
+    <section id={id} ref={sectionRef} className="space-y-6">
       <h2 className="text-3xl font-bold text-blue-600">Getting Started 🚀</h2>
       
       <div className="space-y-6">

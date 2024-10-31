@@ -4,6 +4,7 @@ import { CodeBlock, InlineCode } from '../shared'
 interface PlayerInteractionSectionProps {
   id: string
   children?: React.ReactNode
+  onView: () => void
 }
 
 const jsUpdateScore = `// Function to update the score
@@ -41,9 +42,33 @@ function handleClick(event) {
 // Add click event listener to the canvas
 canvas.addEventListener('click', handleClick);`
 
-export function PlayerInteractionSection({ id, children }: PlayerInteractionSectionProps) {
+export function PlayerInteractionSection({ id, children, onView }: PlayerInteractionSectionProps) {
+  const sectionRef = React.useRef<HTMLElement>(null);
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          onView();
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, [onView]);
+
   return (
-    <section id={id} className="space-y-8">
+    <section id={id} ref={sectionRef} className="space-y-8">
       <h2 className="text-3xl font-bold text-blue-600 mb-6">Stage 5: Handling Player Clicks 👆</h2>
 
       <div className="bg-purple-50 p-6 rounded-lg mb-8">

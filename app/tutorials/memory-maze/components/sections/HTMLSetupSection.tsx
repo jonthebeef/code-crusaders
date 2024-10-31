@@ -4,6 +4,7 @@ import { CodeBlock, InlineCode } from '../shared'
 interface HTMLSetupSectionProps {
   id: string
   children?: React.ReactNode
+  onView: () => void
 }
 
 const htmlStructure = `<!DOCTYPE html>
@@ -58,9 +59,33 @@ const htmlStyles = `<style>
     }
 </style>`
 
-export function HTMLSetupSection({ id, children }: HTMLSetupSectionProps) {
+export function HTMLSetupSection({ id, children, onView }: HTMLSetupSectionProps) {
+  const sectionRef = React.useRef<HTMLElement>(null);
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          onView();
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, [onView]);
+
   return (
-    <section id={id} className="space-y-6">
+    <section id={id} ref={sectionRef} className="space-y-6">
       <h2 className="text-3xl font-bold text-blue-600">Stage 1: Setting Up the Game Board 🖼️</h2>
       
       <div className="bg-purple-50 p-4 rounded-lg">

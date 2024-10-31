@@ -1,15 +1,17 @@
 import React from 'react'
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
+import { tomorrow } from 'react-syntax-highlighter/dist/esm/styles/prism'
 
-// Inline the CodeBlock component
 function CodeBlock({ code, language }: { code: string; language: string }) {
   return (
-    <pre className={`language-${language}`}>
-      <code>{code}</code>
-    </pre>
+    <div className="rounded-md overflow-hidden">
+      <SyntaxHighlighter language={language} style={tomorrow}>
+        {code}
+      </SyntaxHighlighter>
+    </div>
   )
 }
 
-// Inline the InlineCode component
 function InlineCode({ children }: { children: React.ReactNode }) {
   return (
     <code className="px-1.5 py-0.5 rounded-md bg-gray-100 font-mono text-sm">
@@ -20,25 +22,50 @@ function InlineCode({ children }: { children: React.ReactNode }) {
 
 interface HighlightingCellsSectionProps {
   id: string
-  children?: React.ReactNode // Make children optional
+  children?: React.ReactNode
+  onView: () => void
 }
 
 const highlightCellCode = `// Function to highlight a cell
-function highlightCell(row, col, color) {
+function highlightCell(row, col, colour) {
     const x = col * (CELL_SIZE + CELL_GAP);
     const y = row * (CELL_SIZE + CELL_GAP);
 
-    ctx.fillStyle = color;
+    ctx.fillStyle = colour;
     ctx.fillRect(x, y, CELL_SIZE, CELL_SIZE);
 }
 
 // Example usage:
-// highlightCell(1, 2, 'yellow'); // This will highlight the cell at row 1, column 2 with yellow color
+// highlightCell(1, 2, 'yellow'); // This will highlight the cell at row 1, column 2 with yellow colour
 `
 
-export function HighlightingCellsSection({ id, children }: HighlightingCellsSectionProps) {
+export function HighlightingCellsSection({ id, children, onView }: HighlightingCellsSectionProps) {
+  const sectionRef = React.useRef<HTMLElement>(null);
+
+  React.useEffect(() => {
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          onView();
+          observer.unobserve(entry.target);
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current);
+    }
+
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current);
+      }
+    };
+  }, [onView]);
+
   return (
-    <section id={id} className="space-y-6">
+    <section id={id} ref={sectionRef} className="space-y-6">
       <h2 className="text-3xl font-bold text-blue-600">Highlighting Cells 🔦</h2>
       
       <div className="space-y-4">
@@ -62,11 +89,11 @@ export function HighlightingCellsSection({ id, children }: HighlightingCellsSect
               <ul className="list-disc list-inside ml-6 mt-1 space-y-1 text-gray-600">
                 <li><InlineCode>row</InlineCode>: Which row the cell is in (0 to 3)</li>
                 <li><InlineCode>col</InlineCode>: Which column the cell is in (0 to 3)</li>
-                <li><InlineCode>color</InlineCode>: What color to highlight the cell with</li>
+                <li><InlineCode>colour</InlineCode>: What colour to highlight the cell with</li>
               </ul>
             </li>
             <li>It calculates the <InlineCode>x</InlineCode> and <InlineCode>y</InlineCode> position of the cell on the canvas.</li>
-            <li>It sets the fill color to the specified color.</li>
+            <li>It sets the fill colour to the specified colour.</li>
             <li>Finally, it draws a filled rectangle at the calculated position, effectively highlighting the cell.</li>
           </ol>
         </div>
@@ -99,14 +126,14 @@ highlightCell(2, 2, 'green');
 highlightCell(3, 3, 'yellow');
           `} language="javascript" />
           <p className="text-lg text-purple-800 mt-2">
-            Save your file and refresh your browser. You should see four cells highlighted in different colors!
+            Save your file and refresh your browser. You should see four cells highlighted in different colours!
           </p>
         </div>
 
         <div className="bg-green-100 p-4 rounded-lg">
-          <p className="text-lg font-bold text-green-800 mb-2">🌈 Customization Ideas:</p>
+          <p className="text-lg font-bold text-green-800 mb-2">🌈 Customisation Ideas:</p>
           <ul className="list-disc list-inside text-lg space-y-1 text-green-800">
-            <li>Try highlighting different cells with various colors.</li>
+            <li>Try highlighting different cells with various colours.</li>
             <li>Can you make a pattern or a smiley face using highlighted cells?</li>
             <li>Experiment with partially highlighting cells by adjusting the size of the filled rectangle.</li>
           </ul>
