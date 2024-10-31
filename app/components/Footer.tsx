@@ -31,16 +31,17 @@ const Footer: React.FC = () => {
         <p className="text-sm mb-4">© Average Superhuman Ltd 2024</p>
         <div className="space-x-4">
           <Link 
-            href="#" 
+            href="/terms-and-conditions" 
             className="text-neon-yellow hover:text-deep-orange transition-colors duration-300"
             onClick={() => sendGTMEvent({ event: 'footer_link_click', link: 'terms_of_service' })}
           >
             Terms of Service
           </Link>
           <Link 
-            href="#" 
+            href="/privacy-policy" 
             className="text-neon-yellow hover:text-deep-orange transition-colors duration-300"
-            onClick={() => sendGTMEvent({ event: 'footer_link_click', link: 'privacy_policy' })}
+            onClick={() => sendGTMEvent({ event: 'footer_link_click', link: 'privacy_policy' 
+            })}
           >
             Privacy Policy
           </Link>
