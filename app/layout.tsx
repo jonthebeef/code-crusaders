@@ -3,6 +3,8 @@ import './styles/WaveDivider.css'
 import { Inter } from 'next/font/google'
 import { Metadata } from 'next'
 import { GoogleAnalytics } from '@next/third-parties/google'
+import Script from 'next/script'
+import CookieNotice from './components/cookie-notice'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -43,8 +45,22 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
-      <GoogleAnalytics gaId="G-301YNBBL7R" />
+      <head>
+        <Script id="mailchimp-init" strategy="afterInteractive">
+          {`
+            window.enableMailchimp = function() {
+              if (typeof window.loadMailchimp === 'function') {
+                window.loadMailchimp();
+              }
+            };
+          `}
+        </Script>
+      </head>
+      <body className={inter.className}>
+        {children}
+        <CookieNotice />
+        <GoogleAnalytics gaId="G-301YNBBL7R" />
+      </body>
     </html>
   )
 }
