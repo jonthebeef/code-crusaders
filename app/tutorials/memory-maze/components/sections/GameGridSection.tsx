@@ -116,7 +116,7 @@ export function GameGridSection({ id, children, onView }: GameGridSectionProps) 
         <div className="bg-purple-100 p-4 rounded-lg">
           <p className="text-lg font-bold text-purple-800 mb-2">🧪 Try it out!</p>
           <p className="text-lg text-purple-800">
-            Save your <InlineCode>game.js</InlineCode> file and refresh your web browser. 
+            Save your <InlineCode>game.js</InlineCode> file. Go to your web browser (eg Chrome), and press File, then Open. Navigate to your folder, and select "index.html". 
             You should see a 4x4 grid of white squares on a light gray background. 
             This is the foundation of our Memory Maze game!
           </p>

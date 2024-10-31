@@ -106,17 +106,18 @@ export function GettingStartedSection({ id, children, onView }: GettingStartedSe
               Create <InlineCode>index.html</InlineCode>:
               <ul className="list-disc list-inside ml-6 mt-1 space-y-1 text-gray-600">
                 <li>Open your text editor</li>
-                <li>Click File → Save As</li>
-                <li>Type "index.html" (including the quotes)</li>
-                <li>Pick a folder to save it in</li>
+                <li>Click File → Save or (Save As)</li>
+                <li>Type "index.html" as the file name (don't include the quotes)</li>
+                <li>Create a folder called "Memory Maze", or pick another folder to save it in</li>
               </ul>
             </li>
             <li>
               Create <InlineCode>game.js</InlineCode>:
               <ul className="list-disc list-inside ml-6 mt-1 space-y-1 text-gray-600">
                 <li>Open your text editor again</li>
-                <li>Click File → Save As</li>
-                <li>Type "game.js" (including the quotes)</li>
+                <li>Click File → New</li>
+                <li>Click File → Save</li>
+                <li>Type "game.js" (don't include the quotes)</li>
                 <li>Save it in the same folder as index.html</li>
               </ul>
             </li>
