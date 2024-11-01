@@ -12,7 +12,7 @@ const JavaScriptExplanation: React.FC = () => {
   const features = [
     { icon: Code, title: 'Easy as Pie', description: 'No confusing jargon here! JavaScript is super friendly for coding newbies, making it the perfect starting point for young minds.' },
     { icon: Zap, title: 'Instant Magic', description: 'Watch their eyes light up as their code comes to life right before their eyes! JavaScript provides immediate visual feedback.' },
-    { icon: Brain, title: 'Brain Boost', description: "Coding doesn&apos;t just teach tech - it supercharges problem-solving and creativity, essential skills for any future career." },
+    { icon: Brain, title: 'Brain Boost', description: "Coding doesn't just teach tech - it supercharges problem-solving and creativity, essential skills for any future career." },
   ]
 
   return (

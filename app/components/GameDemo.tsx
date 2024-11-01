@@ -251,18 +251,18 @@ export default function GameDemo() {
             We teach kids to code games, allowing them to build, tweak, and make it their own. It&apos;s not just a game, it&apos;s a launchpad for their creativity! 🌠
           </p>
         </motion.div>
-        <div className={`w-full max-w-lg mx-auto p-4 ${pixelFont.className}`}>
-          <h2 className="text-2xl text-white text-center mb-4">Memory Maze</h2>
-          <div className="mb-4 text-white text-center">Score: {score}</div>
+        <div className="w-full max-w-lg mx-auto p-4">
+          <h2 className={`text-2xl text-white text-center mb-4 ${pixelFont.className}`}>Memory Maze</h2>
+          <div className={`mb-4 text-white text-center ${pixelFont.className}`}>Score: {score}</div>
           <div className="relative" style={{ width: '340px', height: '340px', margin: '0 auto' }}>
             <canvas ref={canvasRef} width={CANVAS_SIZE} height={CANVAS_SIZE}></canvas>
             {gameState !== 'playing' && (
               <div className="absolute top-0 left-0 w-full h-full flex flex-col items-center justify-center bg-black bg-opacity-80">
                 {gameState === 'ready' && (
                   <>
-                    <h2 className="text-xl text-white mb-4">Ready to Play?</h2>
+                    <h2 className={`text-xl text-white mb-4 ${pixelFont.className}`}>Ready to Play?</h2>
                     <button
-                      className="bg-blue-500 text-white px-4 py-2 rounded"
+                      className={`bg-blue-500 text-white px-4 py-2 rounded ${pixelFont.className}`}
                       onClick={handleStartGame}
                     >
                       Start Game
@@ -271,8 +271,8 @@ export default function GameDemo() {
                 )}
                 {gameState === 'gameOver' && (
                   <>
-                    <h2 className="text-xl text-white mb-4">Game Over</h2>
-                    <p className="text-white mb-4">Your score: {score}</p>
+                    <h2 className={`text-xl text-white mb-4 ${pixelFont.className}`}>Game Over</h2>
+                    <p className={`text-white mb-4 ${pixelFont.className}`}>Your score: {score}</p>
                     <div className="flex justify-center space-x-4 mb-4">
                       <button onClick={() => shareScore('twitter')} className="text-white hover:text-blue-400">
                         <Twitter size={24} />
@@ -285,7 +285,7 @@ export default function GameDemo() {
                       </button>
                     </div>
                     <button
-                      className="bg-blue-500 text-white px-4 py-2 rounded"
+                      className={`bg-blue-500 text-white px-4 py-2 rounded ${pixelFont.className}`}
                       onClick={handlePlayAgain}
                     >
                       Play Again

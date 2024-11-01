@@ -65,7 +65,7 @@ export default function Hero() {
               transition={{ duration: 0.5 }}
               className={`${lexend.className} text-3xl sm:text-4xl lg:text-5xl font-bold mb-4 lg:mb-6 leading-tight drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]`}
             >
-              Half-Term Coding Fun - Screen Time to Dream Time! 👀
+              Turn Screen Time into Dream Time! 👀
             </motion.h1>
             <motion.h2
               initial={{ opacity: 0, y: 50 }}
@@ -73,7 +73,7 @@ export default function Hero() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className={`${lexend.className} text-lg sm:text-xl lg:text-2xl font-semibold mb-4 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]`}
             >
-              Free Coding Tutorial for Curious Kids - A Perfect Half-Term Activity! 
+              Sign up now, and we'll send you a free game tutorial when we launch. 
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 50 }}
@@ -81,7 +81,7 @@ export default function Hero() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className={`${lexend.className} text-base sm:text-lg mb-3 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]`}
             >
-              Engage your child with a free, interactive coding game that sparks creativity and keeps them absorbed for up to 2 hours. Ideal for introducing them to game-making – a fun, safe way to explore the basics of coding by building something they love to play!
+              Engage your 9-11 year old game making tutorials that spark creativity and keeps them absorbed for up to 2 hours. Ideal for introducing them to making for the web – a fun, safe way to explore the basics of coding by building something they love to play!
             </motion.p>
           </div>
           <div className="lg:w-1/2 xl:w-[45%] flex justify-center items-center">
@@ -93,20 +93,20 @@ export default function Hero() {
             >
               <h3 className={`${lexend.className} text-xl sm:text-2xl font-bold mb-4`}>
                 <span className="bg-gradient-to-r from-[#9B51E0] to-[#F2994A] bg-clip-text text-transparent">
-                  Get a FREE game coding tutorial
+                  Sign up, and get a FREE game coding tutorial
                 </span>
                 <span className="text-[#333333]"> 🎉</span>
               </h3>
-              <p className={`${lexend.className} mb-4 font-bold`}>Keep the kids engaged for hours this half term, plus:</p>
+              {/* <p className={`${lexend.className} mb-4 font-bold`}>Keep the kids engaged for hours this half term, plus:</p> */}
               <ul className={`${lexend.className} list-disc list-inside mb-6`}>
-                <li><strong>Instant Access</strong> to a free coding tutorial 🎮</li>
-                <li><strong>Exclusive 10% Discount</strong> on annual subscriptions (when we launch)</li>
+                <li><strong>10% Discount</strong> on annual subscriptions </li>
                 <li><strong>Be the First to Know</strong> about our launch!</li>
+                <li><strong>Amazing gift idea</strong> - nothing to throw away</li>
               </ul>
               <form onSubmit={handleSubmit} className="space-y-4">
                 <input 
                   type="email" 
-                  placeholder="Get coding! Enter your email for free access." 
+                  placeholder="Enter your email address" 
                   className="w-full p-2 border rounded text-[#333333] border-[#4C9AFF]" 
                   required
                   value={email}
