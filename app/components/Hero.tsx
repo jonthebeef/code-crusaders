@@ -81,7 +81,7 @@ export default function Hero() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className={`${lexend.className} text-base sm:text-lg mb-3 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]`}
             >
-              Engage your 9-11 year old game making tutorials that spark creativity and keeps them absorbed for up to 2 hours. Ideal for introducing them to making for the web – a fun, safe way to explore the basics of coding by building something they love to play!
+              Engage your 9-11 year old with game making tutorials that spark creativity and keeps them absorbed for up to 2 hours. Ideal for introducing them to making for the web – a fun, safe way to explore the basics of coding by building something they love to play!
             </motion.p>
           </div>
           <div className="lg:w-1/2 xl:w-[45%] flex justify-center items-center">
