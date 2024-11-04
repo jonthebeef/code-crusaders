@@ -4,6 +4,7 @@ const nextConfig = {
   trailingSlash: true,
   images: {
     unoptimized: true,  // Use Netlify's image handling directly
+    domains: ['codecrusaders.co.uk'], // Add this line for image optimization
   },
   webpack: (config, { isServer }) => {
     // SVG handling
@@ -22,6 +23,15 @@ const nextConfig = {
     });
 
     return config;
+  },
+  // Add this section to handle the favicon route
+  async rewrites() {
+    return [
+      {
+        source: '/favicon.ico',
+        destination: '/app/favicon.ico',
+      },
+    ];
   },
 }
 

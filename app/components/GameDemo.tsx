@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Press_Start_2P } from 'next/font/google'
 import { Twitter, Linkedin, Facebook } from 'lucide-react'
@@ -55,16 +55,16 @@ export default function GameDemo() {
   const gameActiveRef = useRef(false)
   const lastClickTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  const GRID_SIZE = 5;
-  const CELL_SIZE = 60;
-  const CELL_GAP = 10;
-  const CANVAS_SIZE = GRID_SIZE * CELL_SIZE + (GRID_SIZE - 1) * CELL_GAP;
-  const INITIAL_SEQUENCE_LENGTH = 3;
-  const SEQUENCE_INCREASE = 1;
-  const SEQUENCE_SHOW_INTERVAL = 600;
-  const START_GAME_DELAY = 1000;
-  const CLICK_HIGHLIGHT_DURATION = 300;
-  const NEXT_SEQUENCE_DELAY = 1000;
+  const GRID_SIZE = 5
+  const CELL_SIZE = 60
+  const CELL_GAP = 10
+  const CANVAS_SIZE = GRID_SIZE * CELL_SIZE + (GRID_SIZE - 1) * CELL_GAP
+  const INITIAL_SEQUENCE_LENGTH = 3
+  const SEQUENCE_INCREASE = 1
+  const SEQUENCE_SHOW_INTERVAL = 600
+  const START_GAME_DELAY = 1000
+  const CLICK_HIGHLIGHT_DURATION = 300
+  const NEXT_SEQUENCE_DELAY = 1000
 
   const drawGrid = useCallback((ctx: CanvasRenderingContext2D) => {
     ctx.fillStyle = '#444'

@@ -1,12 +1,16 @@
 import './globals.css'
 import './styles/WaveDivider.css'
-import { Inter } from 'next/font/google'
+import { Inter, Fira_Code } from 'next/font/google'
 import { Metadata } from 'next'
 import { GoogleAnalytics } from '@next/third-parties/google'
 import Script from 'next/script'
 import CookieNotice from './components/cookie-notice'
 
 const inter = Inter({ subsets: ['latin'] })
+const firaCode = Fira_Code({ 
+  subsets: ['latin'],
+  variable: '--font-fira-code'  // Add this line
+})
 
 export const metadata: Metadata = {
   title: 'Code Crusaders',
@@ -44,7 +48,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${firaCode.variable}`}>
       <head>
         <Script id="mailchimp-init" strategy="afterInteractive">
           {`
