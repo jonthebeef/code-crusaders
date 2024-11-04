@@ -1,35 +1,112 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
+interface Section {
+  title: string;
+  content: React.ReactNode;
+}
+
 const CodeBlock = ({ code, language }: { code: string; language: string }) => (
-  <pre className="bg-gray-100 p-4 rounded-md overflow-x-auto">
+  <pre className="bg-gray-800 text-gray-100 p-4 rounded-md overflow-x-auto mb-8">
     <code className={`language-${language}`}>{code}</code>
   </pre>
 )
 
 const InlineCode = ({ children }: { children: React.ReactNode }) => (
-  <code className="bg-gray-100 px-1.5 py-0.5 rounded text-sm font-mono">{children}</code>
+  <code className="bg-gray-800 text-gray-100 px-2 py-1 rounded text-lg font-mono">
+    {children}
+  </code>
 )
+
+interface TableOfContentsProps {
+  sections: Section[];
+  currentSection: number;
+  onSectionClick: (index: number) => void;
+}
+
+const TableOfContents: React.FC<TableOfContentsProps> = ({ sections, currentSection, onSectionClick }) => {
+  const [isOpen, setIsOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  return (
+    <div className="relative w-full" ref={dropdownRef}>
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="md:hidden w-full bg-electric-blue text-white py-2 px-4 rounded-lg flex justify-between items-center"
+      >
+        <span>Table of Contents</span>
+        <svg
+          className={`w-5 h-5 transition-transform ${isOpen ? 'transform rotate-180' : ''}`}
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+        </svg>
+      </button>
+      <div className={`md:block ${isOpen ? 'block' : 'hidden'} w-full`}>
+        <h2 className="text-xl font-bold p-4 bg-electric-blue text-white hidden md:block">Table of Contents</h2>
+        <ul className="py-2">
+          {sections.map((section, index) => (
+            <li key={index} className="w-full">
+              <button
+                onClick={() => {
+                  onSectionClick(index);
+                  setIsOpen(false);
+                }}
+                className={`w-full text-left px-4 py-2 ${
+                  currentSection === index
+                    ? 'bg-electric-blue text-white'
+                    : 'text-dark-charcoal hover:bg-gray-200'
+                }`}
+              >
+                <span className="block w-full overflow-hidden text-ellipsis">
+                  {section.title}
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  )
+}
 
 export default function MemoryMazeTutorial() {
   const [currentSection, setCurrentSection] = useState(0)
+  const mainContentRef = useRef<HTMLDivElement>(null)
 
-  const sections = [
-    // Section 0: Getting Started
-    (
-      <section key="getting-started" className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Getting Started 🚀</h2>
-        <h3 className="text-xl font-semibold mb-2">What You&apos;ll Need</h3>
-        <ul className="list-disc pl-6 mb-4">
-          <li>A computer (Windows, Mac, or Linux)</li>
-          <li>A text editor to write your code (we&apos;ll help you choose one!)</li>
-          <li>A web browser (like Chrome, Firefox, or Edge)</li>
-        </ul>
+  const sections: Section[] = [
+    {
+      title: "Getting Started 🚀",
+      content: (
+        <section key="getting-started" className="mb-8">
+          <h2 className="text-3xl font-semibold mt-8 mb-6 text-vibrant-purple">Getting Started 🚀</h2>
+          <h3 className="text-2xl font-semibold mt-16 mb-6">What You'll Need</h3>
+          <ul className="list-disc pl-6 mb-4">
+            <li>A computer (Windows, Mac, or Linux)</li>
+            <li>A text editor to write your code (we'll help you choose one!)</li>
+            <li>A web browser (like Chrome, Firefox, or Edge)</li>
+          </ul>
 
-        <h3 className="text-xl font-semibold mb-2">Choosing Your Text Editor</h3>
+        <h3 className="text-2xl font-semibold mt-16 mb-6">Choosing Your Text Editor</h3>
         <p className="mb-4">You can use any of these text editors - pick the one that works best for you:</p>
 
         <h4 className="text-lg font-semibold mb-2">For Windows Users:</h4>
@@ -65,7 +142,7 @@ export default function MemoryMazeTutorial() {
           </li>
         </ul>
 
-        <h3 className="text-xl font-semibold mb-2">Creating Your Game Files</h3>
+        <h3 className="text-2xl font-semibold mt-16 mb-6">Creating Your Game Files</h3>
         <p className="mb-4">You&apos;ll need to create a file for your game:</p>
 
         <h4 className="text-lg font-semibold mb-2">Create index.html:</h4>
@@ -76,11 +153,15 @@ export default function MemoryMazeTutorial() {
           <li>Create a folder called &quot;Memory Maze&quot;, or pick another folder or location to save it in</li>
         </ul>
       </section>
-    ),
+    
+    )
+  },
+    {title: "1. Setting Up Our Game Space",
+      content:
     // Section 1: Setting Up Our Game Space
     (
       <section key="setting-up-game-space" className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">1. Setting Up Our Game Space</h2>
+        <h2 className="text-3xl font-semibold mt-8 mb-6 text-vibrant-purple">1. Setting Up Our Game Space</h2>
         <p className="mb-4">Now, let&apos;s create the basic structure for our game, piece by piece. Follow these steps carefully:</p>
         <ol className="list-decimal pl-6 mb-4">
           <li className="mb-2">We&apos;ll add the code line by line. Copy the code below.</li>
@@ -194,11 +275,14 @@ export default function MemoryMazeTutorial() {
 
         <p className="my-4">Great job! You&apos;ve set up the basic structure for your Memory Maze game. In the next section, we&apos;ll start making it look cool with some colors and style!</p>
       </section>
-    ),
+    )
+  },
+    {title: "2. Making Our Game Look Cool",
+      content: 
     // Section 2: Making Our Game Look Cool
     (
       <section key="making-game-look-cool" className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">2. Making Our Game Look Cool</h2>
+        <h2 className="text-3xl font-semibold mt-8 mb-6 text-vibrant-purple">2. Making Our Game Look Cool</h2>
         <p className="mb-4">Now that we have the basic structure of our game, let&apos;s add some style to make it look awesome. We&apos;ll use something called CSS (Cascading Style Sheets) to do this. CSS is like a paintbrush for our webpage - it lets us add colors, change sizes, and make things look just how we want!</p>
 
         <p className="mb-4">Follow these steps carefully:</p>
@@ -365,11 +449,14 @@ button:hover {
 
         <p className="mb-4">Remember: If you don&apos;t see the changes, make sure you&apos;ve saved your file and refreshed your browser page. Don&apos;t be afraid to experiment with different colors and styles - that&apos;s how you learn and make your game unique!</p>
       </section>
-    ),
+    )
+  },
+    {title: "3. Building the Game Board",
+    content:
         // Section 3: Building the Game Board
         (
           <section key="building-game-board" className="mb-8">
-            <h2 className="text-2xl font-semibold mb-4">3. Building the Game Board</h2>
+            <h2 className="text-3xl font-semibold mt-8 mb-6 text-vibrant-purple">3. Building the Game Board</h2>
             <p className="mb-4">Now that we have our basic page set up, let&apos;s add the remaining elements to complete our game board for Memory Maze. We&apos;ll go through each new part step by step.</p>
             <p className="mb-4">First, let&apos;s open your &quot;memory-maze.html&quot; file in your text editor. Find the <InlineCode>&lt;div id=&quot;game-container&quot;&gt;</InlineCode> we created earlier. It should look like this:</p>
             <CodeBlock
@@ -455,11 +542,15 @@ button:hover {
             <p className="mb-4">Remember, it&apos;s okay if things don&apos;t work perfectly the first time. Coding is all about trying, checking, and fixing until everything works just right!</p>
             <p className="mb-4">In the next section, we&apos;ll start adding the JavaScript code to make our game actually work. Get ready to bring your Memory Maze to life!</p>
           </section>
-        ),
+        )
+      },
+      {
+        title: "4. Setting Up Our Game Logic",
+        content: 
     // Section 4: Setting Up Our Game Logic
     (
       <section key="setting-up-game-logic" className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">4. Setting Up Our Game Logic</h2>
+        <h2 className="text-3xl font-semibold mt-8 mb-6 text-vibrant-purple">4. Setting Up Our Game Logic</h2>
         <p className="mb-4">Now that we have our script tags in place, let&apos;s add the JavaScript code that will make our game work. We&apos;ll do this step by step, explaining each part as we go.</p>
         <ol className="list-decimal pl-6 mb-4">
           <li className="mb-2">Open your &quot;memory-maze.html&quot; file in your text editor.</li>
@@ -551,11 +642,15 @@ const scoreElement = document.getElementById('score');`}
         <p className="mb-4">Remember, if something doesn&apos;t look right, double-check your code for any typos. It&apos;s normal to make mistakes when you&apos;re learning to code. Just keep trying, and you&apos;ll get it!</p>
         <p className="mb-4">🎨 Customization Tip: Try changing some of the numbers in the game constants. For example, you could make <InlineCode>GRID_SIZE</InlineCode> smaller for an easier game or larger for a harder one. Just remember to test your game after making changes!</p>
       </section>
-    ),
+    )
+  },
+  {
+    title: "5. Drawing Our Game Board",
+    content: 
     // Section 5: Drawing Our Game Board
     (
       <section key="drawing-game-board" className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">5. Drawing Our Game Board</h2>
+        <h2 className="text-3xl font-semibold mt-8 mb-6 text-vibrant-purple">5. Drawing Our Game Board</h2>
         <p className="mb-4">Now that we have our basic setup, let&apos;s create the functions that will draw our game board. We&apos;ll add two important functions: <InlineCode>drawGrid</InlineCode> and <InlineCode>drawCell</InlineCode>. These functions will work together to create and update our game board.</p>
         <ol className="list-decimal pl-6 mb-4">
           <li className="mb-2">Open your &quot;memory-maze.html&quot; file in your text editor.</li>
@@ -688,11 +783,15 @@ function drawCell(index, active) {
         <p className="mb-4">Make sure your code matches this exactly. If you notice any differences, go back and make the necessary changes. Remember, every character matters in coding!</p>
         <p className="mb-4">In the next section, we&apos;ll add more functions to create and show the sequences for our Memory Maze game. Keep up the great work!</p>
       </section>
-    ),
+    )
+  },
+  {
+    title: "6. Creating and Showing the Sequence",
+    content: 
     // Section 6: Creating and Showing the Sequence
     (
       <section key="creating-showing-sequence" className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">6. Creating and Showing the Sequence</h2>
+        <h2 className="text-3xl font-semibold mt-8 mb-6 text-vibrant-purple">6. Creating and Showing the Sequence</h2>
         <p className="mb-4">Now that we have our game board set up, let&apos;s create the functions that will generate and show the sequence of squares for the player to remember. We&apos;ll add two new functions to our JavaScript code.</p>
         <ol className="list-decimal pl-6 mb-4">
           <li className="mb-2">Open your &quot;memory-maze.html&quot; file in your text editor.</li>
@@ -833,11 +932,15 @@ async function showSequence() {
         <p className="mb-4">Make sure your code matches this exactly. If you notice any differences, go back and make the necessary changes. Remember, every character matters in coding!</p>
         <p className="mb-4">In the next section, we&apos;ll see how we handle player clicks and check if they&apos;ve remembered the sequence correctly. It&apos;s going to be super fun!</p>
       </section>
-    ),
+    )
+  },
+  {
+    title: "7. Handling Player Clicks",
+    content: 
     // Section 7: Handling Player Clicks
     (
       <section key="handling-player-clicks" className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">7. Handling Player Clicks</h2>
+        <h2 className="text-3xl font-semibold mt-8 mb-6 text-vibrant-purple">7. Handling Player Clicks</h2>
         <p className="mb-4">Now we&apos;ll add the <InlineCode>handleClick</InlineCode> function, which controls what happens when a player clicks on a square in the game. This function is crucial for our game&apos;s interactivity and builds on the functions we&apos;ve created earlier.</p>
         <ol className="list-decimal pl-6 mb-4">
           <li className="mb-2">Open your &quot;memory-maze.html&quot; file in your text editor.</li>
@@ -1066,11 +1169,15 @@ function handleClick(event) {
         <p className="mb-4">Make sure your code matches this exactly. If you notice any differences, go back and make the necessary changes. Remember, every character matters in coding!</p>
         <p className="mb-4">In the next section, we&apos;ll create the functions to update the score and show the game over screen. You&apos;re doing great!</p>
       </section>
-    ),
+    )
+  },
+  {
+    title: "8. Updating the Score and Ending the Game",
+    content: 
     // Section 8: Updating the Score and Ending the Game
     (
       <section key="updating-score-ending-game" className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">8. Updating the Score and Ending the Game</h2>
+        <h2 className="text-3xl font-semibold mt-8 mb-6 text-vibrant-purple">8. Updating the Score and Ending the Game</h2>
         <p className="mb-4">Now we&apos;ll add two small but important functions: <InlineCode>updateScore</InlineCode> and <InlineCode>showGameOver</InlineCode>. These functions help us keep track of your score and show you when the game ends.</p>
         <ol className="list-decimal pl-6 mb-4">
           <li className="mb-2">Open your &quot;memory-maze.html&quot; file in your text editor.</li>
@@ -1257,11 +1364,15 @@ function showGameOver() {
         <p className="mb-4">Make sure your code matches this exactly. If you notice any differences, go back and make the necessary changes. Remember, every character matters in coding!</p>
         <p className="mb-4">In the next section, we&apos;ll add the final pieces to start a new game when you click the &quot;Play Again&quot; button. You&apos;re almost done with your Memory Maze game!</p>
       </section>
-    ),
+    )
+  },
+  {
+    title: "9. Starting a New Game",
+    content: 
     // Section 9: Starting a New Game
     (
       <section key="starting-new-game" className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">9. Starting a New Game</h2>
+        <h2 className="text-3xl font-semibold mt-8 mb-6 text-vibrant-purple">9. Starting a New Game</h2>
         <p className="mb-4">Now we&apos;ll add two important functions that work together to start and reset our game: <InlineCode>startNewGame</InlineCode> and <InlineCode>startGame</InlineCode>. These functions will help us begin a new game when we first start playing or when we want to play again after a game over.</p>
         <ol className="list-decimal pl-6 mb-4">
           <li className="mb-2">Open your &quot;memory-maze.html&quot; file in your text editor.</li>
@@ -1479,11 +1590,15 @@ function startGame() {
         <p className="mb-4">Make sure your code matches this exactly. If you notice any differences, go back and make the necessary changes. Remember, every character matters in coding!</p>
         <p className="mb-4">In the next and final section, we&apos;ll add the event listener to make our game start when we click the &quot;Start Game&quot; button. You&apos;re almost done with your Memory Maze game!</p>
       </section>
-    ),
+    )
+  },
+    {
+      title: "10. Setting Up the Game to Start",
+      content:
     // Section 10: Setting Up the Game to Start
     (
       <section key="setting-up-game-to-start" className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">10. Setting Up the Game to Start</h2>
+        <h2 className="text-3xl font-semibold mt-8 mb-6 text-vibrant-purple">10. Setting Up the Game to Start</h2>
         <p className="mb-4">We&apos;re at the final step of creating our Memory Maze game! We just need to add two important lines of code that will make our game ready to play.</p>
         <ol className="list-decimal pl-6 mb-4">
           <li className="mb-2">Open your &quot;memory-maze.html&quot; file in your text editor.</li>
@@ -1681,14 +1796,18 @@ drawGrid();`}
         </ol>
         <p className="mb-4">You&apos;ve learned so much about JavaScript, game development, and problem-solving. Great job sticking with it and creating something awesome!</p>
       </section>
-    ),
+    )
+  },
+  {
+    title: "11. Stuff to try next",
+    content:
     // Congratulations Section
     (
       <section key="congratulations" className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">Congratulations!</h2>
+        <h2 className="text-3xl font-semibold mt-8 mb-6 text-vibrant-purple">Congratulations!</h2>
         <p className="mb-4">You&apos;ve done an amazing job building your very own Memory Maze game. You&apos;ve learned about how games are put together, from drawing the board to handling player clicks. That&apos;s really impressive!</p>
         <p className="mb-4">Now that you&apos;ve got your game working, why not try making it even cooler? Here are some fun ideas to take your game to the next level:</p>
-        <h3 className="text-xl font-semibold mb-2">1. Add Different Difficulty Levels</h3>
+        <h3 className="text-2xl font-semibold mt-16 mb-6">1. Add Different Difficulty Levels</h3>
         <p className="mb-4">You could create an &quot;Easy&quot;, &quot;Medium&quot;, and &quot;Hard&quot; mode. Here&apos;s how:</p>
         <CodeBlock
           code={`const DIFFICULTY = {
@@ -1765,11 +1884,15 @@ function usePowerUp() {
         <p className="mb-4">Use <InlineCode>generateSpiralSequence(INITIAL_SEQUENCE_LENGTH)</InlineCode> instead of <InlineCode>generateSequence</InlineCode> to create spiral patterns!</p>
         <p className="mt-6">Remember, coding is all about experimenting and having fun. Don&apos;t be afraid to try new things and see what happens. You might create something amazing! Keep up the great work!</p>
       </section>
-    ),
+    )
+  },
+  {
+    title: "12. What did you think?",
+    content:
     // Feedback Section
     (
       <section key="feedback" className="mb-8">
-        <h2 className="text-2xl font-semibold mb-4">We&apos;d Love to Hear From You! 🎮</h2>
+        <h2 className="text-3xl font-semibold mt-8 mb-6 text-vibrant-purple">We&apos;d Love to Hear From You! 🎮</h2>
         <p className="mb-4">Hey there, awesome game creator! Now that you&apos;ve built your Memory Maze game, we&apos;d love to know what you thought about making it. Your feedback will help us make our tutorials even better for other young coders like you!</p>
         <p className="mb-4">Could you take a quick moment to tell us about your experience? It&apos;s super easy and fun - just like playing your new game!</p>
         <div className="flex justify-center mb-4">
@@ -1784,43 +1907,80 @@ function usePowerUp() {
         <p className="mb-4">Thank you for being part of our coding community! Keep creating amazing things! 🌟</p>
       </section>
     )
+  }
   ]
 
   useEffect(() => {
     setCurrentSection(prevSection => Math.min(prevSection, sections.length - 1))
   }, [sections.length])
 
-  const nextSection = () => {
-    setCurrentSection(prevSection => Math.min(prevSection + 1, sections.length - 1))
+  const scrollToTop = () => {
+    mainContentRef.current?.scrollIntoView({ behavior: 'smooth' })
   }
 
+  const nextSection = () => {
+    setCurrentSection(prevSection => Math.min(prevSection + 1, sections.length - 1))
+    scrollToTop()
+  }
+  
   const prevSection = () => {
     setCurrentSection(prevSection => Math.max(prevSection - 1, 0))
+    scrollToTop()
   }
 
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-grow container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">Memory Maze Tutorial</h1>
-        {sections[currentSection]}
-        <div className="flex justify-between mt-8">
-          {currentSection > 0 && (
-            <button
-              onClick={prevSection}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      <main className="flex-grow container mx-auto px-4 py-8 relative" ref={mainContentRef}>
+        <div className="md:flex md:space-x-8">
+          <div className="w-full md:w-2/3 text-xl leading-relaxed">
+            <h1 className="text-4xl font-bold mb-8">Memory Maze Tutorial</h1>
+            <div className="md:hidden mb-8">
+              <TableOfContents
+                sections={sections}
+                currentSection={currentSection}
+                onSectionClick={setCurrentSection}
+              />
+            </div>
+            <div className="space-y-8">
+              {sections[currentSection].content}
+            </div>
+            <div className="flex flex-col sm:flex-row justify-between mt-12 space-y-4 sm:space-y-0">
+              {currentSection > 0 && (
+                <button
+                  onClick={prevSection}
+                  className="bg-electric-blue hover:bg-electric-blue/90 text-white text-xl font-bold py-3 px-6 rounded w-full sm:w-auto"
+                >
+                  Previous
+                </button>
+              )}
+              {currentSection < sections.length - 1 && (
+                <button
+                  onClick={nextSection}
+                  className="bg-electric-blue hover:bg-electric-blue/90 text-white text-xl font-bold py-3 px-6 rounded w-full sm:w-auto sm:ml-auto"
+                >
+                  Next
+                </button>
+              )}
+            </div>
+          </div>
+          <div className="hidden md:block" style={{ width: '300px' }}>
+            <div 
+              className="bg-gray-100 rounded-lg overflow-hidden"
+              style={{ 
+                position: 'sticky',
+                top: '140px',
+                maxHeight: 'calc(100vh - 160px)',
+                overflowY: 'auto',
+              }}
             >
-              Previous
-            </button>
-          )}
-          {currentSection < sections.length - 1 && (
-            <button
-              onClick={nextSection}
-              className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded ml-auto"
-            >
-              Next
-            </button>
-          )}
+              <TableOfContents
+                sections={sections}
+                currentSection={currentSection}
+                onSectionClick={setCurrentSection}
+              />
+            </div>
+          </div>
         </div>
       </main>
       <Footer />
