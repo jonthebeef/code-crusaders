@@ -9,7 +9,7 @@ import CookieNotice from './components/cookie-notice'
 const inter = Inter({ subsets: ['latin'] })
 const firaCode = Fira_Code({ 
   subsets: ['latin'],
-  variable: '--font-fira-code'  // Add this line
+  variable: '--font-fira-code'
 })
 
 export const metadata: Metadata = {
@@ -56,6 +56,28 @@ export default function RootLayout({
               if (typeof window.loadMailchimp === 'function') {
                 window.loadMailchimp();
               }
+            };
+          `}
+        </Script>
+        <Script id="ga-custom-events" strategy="afterInteractive">
+          {`
+            window.dataLayer = window.dataLayer || [];
+            function gtag(){dataLayer.push(arguments);}
+            gtag('js', new Date());
+
+            // Custom event for tutorial page views
+            if (window.location.pathname.includes('/memory-maze-tutorial')) {
+              gtag('event', 'tutorial_view', {
+                'tutorial_name': 'Memory Maze'
+              });
+            }
+
+            // Function to track tutorial progress
+            window.trackTutorialProgress = function(sectionName) {
+              gtag('event', 'tutorial_progress', {
+                'tutorial_name': 'Memory Maze',
+                'section_name': sectionName
+              });
             };
           `}
         </Script>
