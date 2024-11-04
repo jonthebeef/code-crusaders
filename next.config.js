@@ -33,6 +33,7 @@ const nextConfig = {
       },
     ];
   },
+  // Remove the experimental section as App Router is now default
 }
 
 module.exports = nextConfig;
