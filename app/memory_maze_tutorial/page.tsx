@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
 import Header from '../components/Header'
 import Footer from '../components/Footer'
 
@@ -10,7 +11,7 @@ interface Section {
 }
 
 const CodeBlock = ({ code, language }: { code: string; language: string }) => (
-  <pre className="bg-gray-800 text-gray-100 p-4 rounded-md overflow-x-auto mb-8">
+  <pre className="bg-gray-800 text-gray-100 p-4 rounded-md overflow-x-auto mt-8 mb-8">
     <code className={`language-${language}`}>{code}</code>
   </pre>
 )
@@ -91,6 +92,8 @@ const TableOfContents: React.FC<TableOfContentsProps> = ({ sections, currentSect
 
 export default function MemoryMazeTutorial() {
   const [currentSection, setCurrentSection] = useState(0)
+  const [direction, setDirection] = useState(0)
+  const contentRef = useRef<HTMLDivElement>(null)
   const mainContentRef = useRef<HTMLDivElement>(null)
 
   const sections: Section[] = [
@@ -99,14 +102,15 @@ export default function MemoryMazeTutorial() {
       content: (
         <section key="getting-started" className="mb-8">
           <h2 className="text-3xl font-semibold mt-8 mb-6 text-vibrant-purple">Getting Started 🚀</h2>
-          <h3 className="text-2xl font-semibold mt-16 mb-6">What You'll Need</h3>
+          <p>We've designed this tutorial to be really easy, and aside from a computer, you won't need anything else (other than your 🧠). Try and complete this tutorial on your own, and remember to give us some feedback at the end.</p>
+          <h3 className="text-2xl font-semibold mt-12 mb-6">What You'll Need</h3>
           <ul className="list-disc pl-6 mb-4">
             <li>A computer (Windows, Mac, or Linux)</li>
             <li>A text editor to write your code (we'll help you choose one!)</li>
             <li>A web browser (like Chrome, Firefox, or Edge)</li>
           </ul>
 
-        <h3 className="text-2xl font-semibold mt-16 mb-6">Choosing Your Text Editor</h3>
+        <h3 className="text-2xl font-semibold mt-12 mb-6">Choosing Your Text Editor</h3>
         <p className="mb-4">You can use any of these text editors - pick the one that works best for you:</p>
 
         <h4 className="text-lg font-semibold mb-2">For Windows Users:</h4>
@@ -142,18 +146,18 @@ export default function MemoryMazeTutorial() {
           </li>
         </ul>
 
-        <h3 className="text-2xl font-semibold mt-16 mb-6">Creating Your Game Files</h3>
-        <p className="mb-4">You&apos;ll need to create a file for your game:</p>
-
-        <h4 className="text-lg font-semibold mb-2">Create index.html:</h4>
+        <h3 className="text-2xl font-semibold mt-12 mb-6">When You See a Codeblock</h3>
+        <p className="mb-4">You can highlight the code inside, and copy, then paste it.</p>
         <ul className="list-disc pl-6 mb-4">
-          <li>Open your text editor</li>
-          <li>Click File → Save or (Save As)</li>
-          <li>Type &quot;index.html&quot; as the file name (don&apos;t include the quotes)</li>
-          <li>Create a folder called &quot;Memory Maze&quot;, or pick another folder or location to save it in</li>
+          <li>Highlight the content by hovering over the first letter or number.</li>
+          <li>Hold down the mouse button and drag along the block of code or text</li>
+          <li>Press Edit → "Copy", to copy the code to your clipboard</li>
+          <li>Press Edit → "Paste" in the place you want it to go.</li>  
+          <li>See if you can learn the keyboard shortcuts! </li>
         </ul>
+        <CodeBlock code={`Try copying all this text and pasting it into a document.`} language="html"/>
+         <p>If you struggle to get it right, keep trying - it&apos;s a very useful way of using a computer to know. And we&apos;re pretty sure a grown up can help you if it&apos;s really difficult!</p>
       </section>
-    
     )
   },
     {title: "1. Setting Up Our Game Space",
@@ -1910,40 +1914,96 @@ function usePowerUp() {
   }
   ]
 
-  useEffect(() => {
-    setCurrentSection(prevSection => Math.min(prevSection, sections.length - 1))
-  }, [sections.length])
+  const handleSectionChange = (newSection: number) => {
+    setCurrentSection(newSection);
+    setDirection(newSection > currentSection ? 1 : -1);
 
-  const scrollToTop = () => {
-    mainContentRef.current?.scrollIntoView({ behavior: 'smooth' })
+    if (mainContentRef.current) {
+      const headerOffset = 100; // Adjust this value based on your header height
+      const elementPosition = mainContentRef.current.getBoundingClientRect().top;
+      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+      
+      window.scrollTo({
+        top: offsetPosition,
+        behavior: "smooth"
+      });
+    }
+
+    if (typeof window.trackTutorialProgress === 'function') {
+      window.trackTutorialProgress(sections[newSection].title);
+    }
   }
 
   const nextSection = () => {
-    setCurrentSection(prevSection => Math.min(prevSection + 1, sections.length - 1))
-    scrollToTop()
+    if (currentSection < sections.length - 1) {
+      handleSectionChange(currentSection + 1);
+    }
   }
   
   const prevSection = () => {
-    setCurrentSection(prevSection => Math.max(prevSection - 1, 0))
-    scrollToTop()
+    if (currentSection > 0) {
+      handleSectionChange(currentSection - 1);
+    }
   }
+
+  const pageVariants = {
+    enter: (direction: number) => ({
+      x: direction > 0 ? 1000 : -1000,
+      opacity: 0
+    }),
+    center: {
+      x: 0,
+      opacity: 1
+    },
+    exit: (direction: number) => ({
+      x: direction < 0 ? 1000 : -1000,
+      opacity: 0
+    })
+  }
+
+  const pageTransition = {
+    type: "tween",
+    ease: "anticipate",
+    duration: 0.5
+  }
+
+  useEffect(() => {
+    setCurrentSection(prevSection => Math.min(prevSection, sections.length - 1))
+    
+    if (typeof window.trackTutorialProgress === 'function') {
+      window.trackTutorialProgress('Tutorial Start');
+    }
+  }, [sections.length])
 
   return (
     <div className="flex flex-col min-h-screen">
       <Header />
-      <main className="flex-grow container mx-auto px-4 py-8 relative" ref={mainContentRef}>
+      <main className="flex-grow container mx-auto px-4 py-8" ref={mainContentRef}>
+        <h1 className="text-4xl font-bold mb-8">Memory Maze Tutorial</h1>
         <div className="md:flex md:space-x-8">
           <div className="w-full md:w-2/3 text-xl leading-relaxed">
-            <h1 className="text-4xl font-bold mb-8">Memory Maze Tutorial</h1>
             <div className="md:hidden mb-8">
               <TableOfContents
                 sections={sections}
                 currentSection={currentSection}
-                onSectionClick={setCurrentSection}
+                onSectionClick={handleSectionChange}
               />
             </div>
-            <div className="space-y-8">
-              {sections[currentSection].content}
+            <div className="relative" ref={contentRef}>
+              <AnimatePresence initial={false} custom={direction} mode="wait">
+                <motion.div
+                  key={currentSection}
+                  custom={direction}
+                  variants={pageVariants}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  transition={pageTransition}
+                  className="w-full"
+                >
+                  {sections[currentSection].content}
+                </motion.div>
+              </AnimatePresence>
             </div>
             <div className="flex flex-col sm:flex-row justify-between mt-12 space-y-4 sm:space-y-0">
               {currentSection > 0 && (
@@ -1977,7 +2037,7 @@ function usePowerUp() {
               <TableOfContents
                 sections={sections}
                 currentSection={currentSection}
-                onSectionClick={setCurrentSection}
+                onSectionClick={handleSectionChange}
               />
             </div>
           </div>
