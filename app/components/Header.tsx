@@ -1,15 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { Lexend } from 'next/font/google'
 import { sendGTMEvent } from '@next/third-parties/google'
+import { usePathname } from 'next/navigation'
 
 const lexend = Lexend({ subsets: ['latin'] })
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const [showNav, setShowNav] = useState(false)
+  const pathname = usePathname()
 
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
@@ -17,6 +20,18 @@ export default function Header() {
   }
 
   const navItems = ['Home', 'Features', 'Game Demo', 'About']
+
+  useEffect(() => {
+    // Determine whether to show nav based on the current path
+    setShowNav(!pathname.startsWith('/memory_maze_tutorial'))
+    
+    // Close the menu when the route changes
+    setIsMenuOpen(false)
+
+    // Debug logging
+    console.log('Current pathname:', pathname)
+    console.log('showNav:', !pathname.startsWith('/memory_maze_tutorial'))
+  }, [pathname])
 
   return (
     <header className="bg-soft-gray text-dark-charcoal shadow-md sticky top-0 z-10">
@@ -32,29 +47,33 @@ export default function Header() {
               priority
             />
           </Link>
-          <div className="lg:hidden">
-            <button onClick={toggleMenu} className="text-dark-charcoal hover:text-vibrant-purple">
-              <svg className="w-6 h-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
-                <path d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}></path>
-              </svg>
-            </button>
-          </div>
-          <ul className={`${lexend.className} lg:flex lg:space-x-8 ${isMenuOpen ? 'block' : 'hidden'} lg:block absolute lg:relative top-full left-0 right-0 bg-soft-gray lg:bg-transparent shadow-md lg:shadow-none`}>
-            {navItems.map((item) => (
-              <li key={item} className="py-2 lg:py-0">
-                <Link 
-                  href={`#${item.toLowerCase().replace(' ', '-')}`} 
-                  className="block px-4 lg:px-0 text-dark-charcoal hover:text-vibrant-purple transition-colors duration-300" 
-                  onClick={() => {
-                    setIsMenuOpen(false)
-                    sendGTMEvent({ event: 'nav_click', item: item.toLowerCase().replace(' ', '_') })
-                  }}
-                >
-                  {item}
-                </Link>
-              </li>
-            ))}
-          </ul>
+          {showNav && (
+            <>
+              <div className="lg:hidden">
+                <button onClick={toggleMenu} className="text-dark-charcoal hover:text-vibrant-purple">
+                  <svg className="w-6 h-6" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor">
+                    <path d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}></path>
+                  </svg>
+                </button>
+              </div>
+              <ul className={`${lexend.className} lg:flex lg:space-x-8 ${isMenuOpen ? 'block' : 'hidden'} lg:block absolute lg:relative top-full left-0 right-0 bg-soft-gray lg:bg-transparent shadow-md lg:shadow-none`}>
+                {navItems.map((item) => (
+                  <li key={item} className="py-2 lg:py-0">
+                    <Link 
+                      href={`/#${item.toLowerCase().replace(' ', '-')}`} 
+                      className="block px-4 lg:px-0 text-dark-charcoal hover:text-vibrant-purple transition-colors duration-300" 
+                      onClick={() => {
+                        setIsMenuOpen(false)
+                        sendGTMEvent({ event: 'nav_click', item: item.toLowerCase().replace(' ', '_') })
+                      }}
+                    >
+                      {item}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </>
+          )}
         </nav>
       </div>
     </header>
