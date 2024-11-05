@@ -138,10 +138,10 @@ export default function MemoryMazeTutorial() {
           <li>
             TextEdit - Already on your Mac!
             <ul className="list-disc pl-6 mt-2">
-              <li>Open Finder</li>
-              <li>Click Applications</li>
-              <li>Find and open TextEdit</li>
-              <li>Important: Go to TextEdit → Format → select &quot;Make Plain Text&quot;</li>
+              <li>Hold down the command key and press the space bar</li>
+              <li>Type "Textedit" (without the quotes)</li>
+              <li>Find, and click to open TextEdit</li>
+              <li>Now you're in the application, this is important: Go to the menu bar at the top of the screen, click TextEdit → Format → select &quot;Make Plain Text&quot;</li>
             </ul>
           </li>
         </ul>
