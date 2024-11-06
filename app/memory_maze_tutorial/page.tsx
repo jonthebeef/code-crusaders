@@ -455,196 +455,99 @@ button:hover {
       </section>
     )
   },
-    {title: "3. Building the Game Board",
-    content:
-        // Section 3: Building the Game Board
-        (
-          <section key="building-game-board" className="mb-8">
-            <h2 className="text-3xl font-semibold mt-8 mb-6 text-vibrant-purple">3. Building the Game Board</h2>
-            <p className="mb-4">Now that we have our basic page set up, let&apos;s add the remaining elements to complete our game board for Memory Maze. We&apos;ll go through each new part step by step.</p>
-            <p className="mb-4">First, let&apos;s open your &quot;memory-maze.html&quot; file in your text editor. Find the <InlineCode>&lt;div id=&quot;game-container&quot;&gt;</InlineCode> we created earlier. It should look like this:</p>
-            <CodeBlock
-              code={`<div id="game-container">
-        <h1>Memory Maze</h1>
-        <!-- We'll add new elements here -->
-    </div>`}
-              language="html"
-            />
-            <p className="mb-4">We already have our game title, so we don&apos;t need to add another <InlineCode>&lt;h1&gt;</InlineCode> tag. Let&apos;s add the rest of our game elements inside this container, right after the <InlineCode>&lt;h1&gt;</InlineCode> tag.</p>
-            <ol className="list-decimal pl-6 mb-4">
-              <li className="mb-2">Add a place to show the player&apos;s score:</li>
-            </ol>
-            <p className="mb-4">On a new line right after the <InlineCode>&lt;h1&gt;Memory Maze&lt;/h1&gt;</InlineCode> line, add this code:</p>
-            <CodeBlock
-              code={`<div id="score">Score: 0</div>`}
-              language="html"
-            />
-            <p className="mb-4">This creates a special area to display the score. We start with &quot;Score: 0&quot; because when the game begins, the player hasn&apos;t scored any points yet.</p>
-            <ol start={2} className="list-decimal pl-6 mb-4">
-              <li className="mb-2">Next, let&apos;s create a space for our game grid:</li>
-            </ol>
-            <p className="mb-4">On a new line right after the score <InlineCode>&lt;div&gt;</InlineCode> we just added, paste this code:</p>
-            <CodeBlock
-              code={`<div style="position: relative; width: 340px; height: 340px; margin: 0 auto;">
-        <canvas id="gameCanvas" width="340" height="340"></canvas>
-    </div>`}
-              language="html"
-            />
-            <p className="mb-4">This does two things:</p>
-            <ul className="list-disc pl-6 mb-4">
-              <li>The outer <InlineCode>&lt;div&gt;</InlineCode> creates a container for our game grid.</li>
-              <li>Inside, we have a <InlineCode>&lt;canvas&gt;</InlineCode> element. Think of this as a special drawing board for our game.</li>
-            </ul>
-            <ol start={3} className="list-decimal pl-6 mb-4">
-              <li className="mb-2">Lastly, we&apos;ll add an overlay for game messages:</li>
-            </ol>
-            <p className="mb-4">Right after the <InlineCode>&lt;canvas&gt;</InlineCode> tag (but still inside the <InlineCode>&lt;div&gt;</InlineCode> we just created), add this code:</p>
-            <CodeBlock
-              code={`<div id="overlay" class="overlay">
-        <h2 id="overlayTitle">Ready to Play?</h2>
-        <p id="finalScore" style="display: none;">Your score: 0</p>
-        <button id="startButton" onclick="startGame()">Start Game</button>
-    </div>`}
-              language="html"
-            />
-            <p className="mb-4">This creates an overlay that will appear on top of our game grid. It includes:</p>
-            <ul className="list-disc pl-6 mb-4">
-              <li>A title asking if the player is ready to play.</li>
-              <li>A place to show the final score (which is hidden at first).</li>
-              <li>A button to start the game.</li>
-            </ul>
-            <p className="mb-4">Now, let&apos;s check our work. Your complete <InlineCode>&lt;div id=&quot;game-container&quot;&gt;</InlineCode> should look like this:</p>
-            <CodeBlock
-              code={`<div id="game-container">
-        <h1>Memory Maze</h1>
-        <div id="score">Score: 0</div>
-        <div style="position: relative; width: 340px; height: 340px; margin: 0 auto;">
-            <canvas id="gameCanvas" width="340" height="340"></canvas>
-            <div id="overlay" class="overlay">
-                <h2 id="overlayTitle">Ready to Play?</h2>
-                <p id="finalScore" style="display: none;">Your score: 0</p>
-                <button id="startButton" onclick="startGame()">Start Game</button>
-            </div>
-        </div>
-    </div>`}
-              language="html"
-            />
-            <p className="mb-4">Make sure your code matches this exactly. Each opening tag (like <InlineCode>&lt;div&gt;</InlineCode>) should be on its own line, and the closing tags (like <InlineCode>&lt;/div&gt;</InlineCode>) should line up with their opening tags.</p>
-            <p className="mb-4">🎨 Customization Tip: If you want, you can change the text inside the <InlineCode>&lt;h2&gt;</InlineCode> tag to say something different. For example, you could change &quot;Ready to Play?&quot; to &quot;Let&apos;s Begin!&quot; or &quot;Start Your Memory Challenge!&quot;.</p>
-            <p className="mb-4">Now, save your file and refresh your browser. You should see:</p>
-            <ol className="list-decimal pl-6 mb-4">
-              <li>Your game title &quot;Memory Maze&quot; at the top</li>
-              <li>A score of 0 below the title</li>
-              <li>A &quot;Start Game&quot; button</li>
-            </ol>
-            <p className="mb-4">If you don&apos;t see these changes:</p>
-            <ol className="list-decimal pl-6 mb-4">
-              <li>Make sure you saved your file after making changes</li>
-              <li>Refresh your browser page (you can usually do this by pressing F5 on your keyboard)</li>
-              <li>Double-check that you&apos;ve pasted all the new code in the right places</li>
-            </ol>
-            <p className="mb-4">Remember, it&apos;s okay if things don&apos;t work perfectly the first time. Coding is all about trying, checking, and fixing until everything works just right!</p>
-            <p className="mb-4">In the next section, we&apos;ll start adding the JavaScript code to make our game actually work. Get ready to bring your Memory Maze to life!</p>
-          </section>
-        )
-      },
-      {
-        title: "4. Setting Up Our Game Logic",
-        content: 
-    // Section 4: Setting Up Our Game Logic
-    (
-      <section key="setting-up-game-logic" className="mb-8">
-        <h2 className="text-3xl font-semibold mt-8 mb-6 text-vibrant-purple">4. Setting Up Our Game Logic</h2>
-        <p className="mb-4">Now that we have our script tags in place, let&apos;s add the JavaScript code that will make our game work. We&apos;ll do this step by step, explaining each part as we go.</p>
+  {
+    title: "3. Building the Game Board",
+    content: (
+      <section key="building-game-board" className="mb-8">
+        <h2 className="text-3xl font-semibold mt-8 mb-6 text-vibrant-purple">3. Building the Game Board</h2>
+        <p className="mb-4">Now let's add the remaining elements to complete our game board. We'll do this step by step, adding new parts inside our game container.</p>
         <ol className="list-decimal pl-6 mb-4">
-          <li className="mb-2">Open your &quot;memory-maze.html&quot; file in your text editor.</li>
-          <li className="mb-2">Find the <InlineCode>&lt;script&gt;</InlineCode> tags near the bottom of your file, just before the closing <InlineCode>&lt;/body&gt;</InlineCode> tag. They should be empty or contain a comment like <InlineCode>{'// We\'ll add our game code here'}</InlineCode>.</li>
-          <li className="mb-2">If there&apos;s any existing content inside the <InlineCode>&lt;script&gt;</InlineCode> tags, delete it. We&apos;re going to start fresh.</li>
-          <li className="mb-2">On a new line inside the <InlineCode>&lt;script&gt;</InlineCode> tags, let&apos;s start by adding some rules for our game. Copy and paste this code:</li>
+          <li className="mb-2">Open your "memory-maze.html" file in your text editor.</li>
+          <li className="mb-2">Find the <InlineCode>&lt;div id="game-container"&gt;</InlineCode> we created earlier. It should look like this:</li>
         </ol>
         <CodeBlock
-          code={`// Game constants
-const GRID_SIZE = 5;
-const CELL_SIZE = 60;
-const CELL_GAP = 10;
-const CANVAS_SIZE = GRID_SIZE * CELL_SIZE + (GRID_SIZE - 1) * CELL_GAP;
-const INITIAL_SEQUENCE_LENGTH = 3;
-const SEQUENCE_INCREASE = 1;
-const SEQUENCE_SHOW_INTERVAL = 600;
-const START_GAME_DELAY = 1000;
-const CLICK_HIGHLIGHT_DURATION = 300;
-const NEXT_SEQUENCE_DELAY = 1000;`}
-          language="javascript"
-        />
-        <p className="mb-4">Make sure each constant is on its own line, just like in the example above.</p>
-        <ol start={5} className="list-decimal pl-6 mb-4">
-          <li className="mb-2">After the last constant (NEXT_SEQUENCE_DELAY), press Enter twice to create a blank line. Then, on this new line, add the following code for our game variables:</li>
-        </ol>
-        <CodeBlock
-          code={`// Game variables
-let gameState = 'ready';
-let score = 0;
-let sequence = [];
-let playerSequence = [];
-let showingSequence = false;
-let gameActive = false;
-let lastClickTimeout = null;`}
-          language="javascript"
-        />
-        <p className="mb-4">Again, make sure each variable is on its own line.</p>
-        <ol start={6} className="list-decimal pl-6 mb-4">
-          <li className="mb-2">After the last variable (lastClickTimeout), press Enter twice to create another blank line. On this new line, add the following code to select elements from our HTML:</li>
-        </ol>
-        <CodeBlock
-          code={`// DOM elements
-const canvas = document.getElementById('gameCanvas');
-const ctx = canvas.getContext('2d');
-const overlay = document.getElementById('overlay');
-const overlayTitle = document.getElementById('overlayTitle');
-const startButton = document.getElementById('startButton');
-const finalScoreElement = document.getElementById('finalScore');
-const scoreElement = document.getElementById('score');`}
-          language="javascript"
-        />
-        <p className="mb-4">Ensure each element selection is on its own line.</p>
-        <p className="mb-4">Your complete <InlineCode>&lt;script&gt;</InlineCode> section should now look like this:</p>
-        <CodeBlock
-          code={`<script>
-    // Game constants
-    const GRID_SIZE = 5;
-    const CELL_SIZE = 60;
-    const CELL_GAP = 10;
-    const CANVAS_SIZE = GRID_SIZE * CELL_SIZE + (GRID_SIZE - 1) * CELL_GAP;
-    const INITIAL_SEQUENCE_LENGTH = 3;
-    const SEQUENCE_INCREASE = 1;
-    const SEQUENCE_SHOW_INTERVAL = 600;
-    const START_GAME_DELAY = 1000;
-    const CLICK_HIGHLIGHT_DURATION = 300;
-    const NEXT_SEQUENCE_DELAY = 1000;
-
-    // Game variables
-    let gameState = 'ready';
-    let score = 0;
-    let sequence = [];
-    let playerSequence = [];
-    let showingSequence = false;
-    let gameActive = false;
-    let lastClickTimeout = null;
-
-    // DOM elements
-    const canvas = document.getElementById('gameCanvas');
-    const ctx = canvas.getContext('2d');
-    const overlay = document.getElementById('overlay');
-    const overlayTitle = document.getElementById('overlayTitle');
-    const startButton = document.getElementById('startButton');
-    const finalScoreElement = document.getElementById('finalScore');
-    const scoreElement = document.getElementById('score');
-</script>`}
+          code={`<div id="game-container">
+  <h1>Memory Maze</h1>
+  <!-- We'll add new elements here -->
+</div>`}
           language="html"
         />
-        <p className="mb-4">Great job! You&apos;ve just set up the basic structure for your Memory Maze game. In the next part, we&apos;ll add the functions that make the game work.</p>
-        <p className="mb-4">Remember, if something doesn&apos;t look right, double-check your code for any typos. It&apos;s normal to make mistakes when you&apos;re learning to code. Just keep trying, and you&apos;ll get it!</p>
-        <p className="mb-4">🎨 Customization Tip: Try changing some of the numbers in the game constants. For example, you could make <InlineCode>GRID_SIZE</InlineCode> smaller for an easier game or larger for a harder one. Just remember to test your game after making changes!</p>
+        <ol start={3} className="list-decimal pl-6 mb-4">
+          <li className="mb-2">Delete the comment line that says <InlineCode>{'<!-- We\'ll add new elements here -->'}</InlineCode>. We're going to replace it with our new game elements.</li>
+          <li className="mb-2">Let's add a place to show the player's score. Right after the <InlineCode>&lt;h1&gt;Memory Maze&lt;/h1&gt;</InlineCode> line, add this new line:</li>
+        </ol>
+        <CodeBlock
+          code={`<div id="score">Score: 0</div>`}
+          language="html"
+        />
+        <ol start={5} className="list-decimal pl-6 mb-4">
+          <li className="mb-2">Now, we're going to create a special container for our game grid and overlay. Add these lines right after the score <InlineCode>&lt;div&gt;</InlineCode> you just added:</li>
+        </ol>
+        <CodeBlock
+          code={`<div style="position: relative; width: 340px; height: 340px; margin: 0 auto;">
+  <!-- We'll put our canvas and overlay here -->
+</div>`}
+          language="html"
+        />
+        <ol start={6} className="list-decimal pl-6 mb-4">
+          <li className="mb-2">Inside this new container, we'll add our game canvas. Replace the comment in the div you just created with this line:</li>
+        </ol>
+        <CodeBlock
+          code={`<canvas id="gameCanvas" width="340" height="340"></canvas>`}
+          language="html"
+        />
+        <ol start={7} className="list-decimal pl-6 mb-4">
+          <li className="mb-2">Right after the <InlineCode>&lt;canvas&gt;</InlineCode> tag, still inside the same container div, we'll add our overlay:</li>
+        </ol>
+        <CodeBlock
+          code={`<div id="overlay" class="overlay">
+  <h2 id="overlayTitle">Ready to Play?</h2>
+  <p id="finalScore" style="display: none;">Your score: 0</p>
+  <button id="startButton" onclick="startGame()">Start Game</button>
+</div>`}
+          language="html"
+        />
+        <p className="mb-4">Think of this structure like nesting boxes:</p>
+        <ul className="list-disc pl-6 mb-4">
+          <li>The big box is your <InlineCode>game-container</InlineCode></li>
+          <li>Inside that, you have your title, score, and another box</li>
+          <li>This new box contains your canvas (game board) and overlay (for messages)</li>
+          <li>The canvas and overlay sit on top of each other, like two sheets of paper in the same box</li>
+        </ul>
+        <ol start={8} className="list-decimal pl-6 mb-4">
+          <li className="mb-2">Now, let's check our work. Your complete <InlineCode>&lt;div id="game-container"&gt;</InlineCode> should look like this:</li>
+        </ol>
+        <CodeBlock
+          code={`<div id="game-container">
+  <h1>Memory Maze</h1>
+  <div id="score">Score: 0</div>
+  <div style="position: relative; width: 340px; height: 340px; margin: 0 auto;">
+      <canvas id="gameCanvas" width="340" height="340"></canvas>
+      <div id="overlay" class="overlay">
+          <h2 id="overlayTitle">Ready to Play?</h2>
+          <p id="finalScore" style="display: none;">Your score: 0</p>
+          <button id="startButton" onclick="startGame()">Start Game</button>
+      </div>
+  </div>
+</div>`}
+          language="html"
+        />
+        <p className="mb-4">Make sure your code matches this exactly. Each opening tag (like <InlineCode>&lt;div&gt;</InlineCode>) should be on its own line, and the closing tags (like <InlineCode>&lt;/div&gt;</InlineCode>) should line up with their opening tags.</p>
+        <p className="mb-4">🎨 Customization Tip: If you want, you can change the text inside the <InlineCode>&lt;h2&gt;</InlineCode> tag to say something different. For example, you could change "Ready to Play?" to "Let's Begin!" or "Start Your Memory Challenge!".</p>
+        <p className="mb-4">Now, save your file and refresh your browser. You should see:</p>
+        <ul className="list-disc pl-6 mb-4">
+          <li>Your game title "Memory Maze" at the top</li>
+          <li>A score of 0 below the title</li>
+          <li>A "Start Game" button</li>
+        </ul>
+        <p className="mb-4">If you don't see these changes:</p>
+        <ul className="list-disc pl-6 mb-4">
+          <li>Make sure you saved your file after making changes</li>
+          <li>Refresh your browser page (you can usually do this by pressing F5 on your keyboard)</li>
+          <li>Double-check that you've pasted all the new code in the right places</li>
+          <li>Remember, it's okay if things don't work perfectly the first time. Coding is all about trying, checking, and fixing until everything works just right!</li>
+        </ul>
+        <p className="mb-4">In the next section, we'll start adding the JavaScript code to make our game actually work. Get ready to bring your Memory Maze to life!</p>
       </section>
     )
   },
