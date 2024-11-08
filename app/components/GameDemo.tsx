@@ -4,7 +4,7 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { Press_Start_2P } from 'next/font/google'
 import { Twitter, Linkedin, Facebook } from 'lucide-react'
-import { trackButtonClick, trackGameEvent } from './EventTrackers'
+import { trackButtonClick } from './EventTrackers'
 
 const pixelFont = Press_Start_2P({ 
   weight: '400',
@@ -44,6 +44,7 @@ function TrianglePattern({
     </svg>
   )
 }
+
 
 export default function GameDemo() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -118,7 +119,6 @@ export default function GameDemo() {
     gameActiveRef.current = true
     drawGrid(ctx)
 
-    trackGameEvent('game_start')
 
     setTimeout(() => {
       showSequence(ctx)
@@ -154,7 +154,6 @@ export default function GameDemo() {
     if (!isCorrect) {
       gameActiveRef.current = false
       setGameState('gameOver')
-      trackGameEvent('game_over', { score })
       return
     }
 
@@ -176,7 +175,7 @@ export default function GameDemo() {
         }
       }
     }, CLICK_HIGHLIGHT_DURATION)
-  }, [generateSequence, score, showSequence, drawCell, drawGrid])
+  }, [generateSequence, showSequence, drawCell, drawGrid])
 
   useEffect(() => {
     const canvas = canvasRef.current

@@ -3,12 +3,11 @@
 import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Lexend } from 'next/font/google'
-import { sendGTMEvent } from '@next/third-parties/google'
 import Link from 'next/link'
 
 const lexend = Lexend({ subsets: ['latin'] })
 
-export default function Hero() {
+export default function Hero({ trackFormSubmission }: { trackFormSubmission: (formType: string) => void }) {
   const [email, setEmail] = useState('')
   const [marketingConsent, setMarketingConsent] = useState(false)
   const [termsConsent, setTermsConsent] = useState(false)
@@ -39,7 +38,10 @@ export default function Hero() {
 
       if (response.ok) {
         setSubmitMessage('Thank you for your interest! We\'ll be in touch soon.')
-        sendGTMEvent({ event: 'form_submission', type: 'hero_email' })
+        trackFormSubmission('hero_email')
+        if (typeof window.trackFBEvent !== 'undefined') {
+          window.trackFBEvent('CompleteRegistration', { content_name: 'Hero Email Signup' });
+        }
         setEmail('')
         setMarketingConsent(false)
         setTermsConsent(false)
@@ -73,7 +75,7 @@ export default function Hero() {
               transition={{ duration: 0.5, delay: 0.2 }}
               className={`${lexend.className} text-lg sm:text-xl lg:text-2xl font-semibold mb-4 drop-shadow-[0_1px_1px_rgba(0,0,0,0.8)]`}
             >
-              Sign up now, and we'll send you a free game tutorial when we launch. 
+              Sign up now, and we'll send you a free game tutorial. 
             </motion.h2>
             <motion.p
               initial={{ opacity: 0, y: 50 }}
@@ -97,7 +99,7 @@ export default function Hero() {
                 </span>
                 <span className="text-[#333333]"> 🎉</span>
               </h3>
-              {/* <p className={`${lexend.className} mb-4 font-bold`}>Keep the kids engaged for hours this half term, plus:</p> */}
+              <p className={`${lexend.className} mb-4 font-bold`}>A perfect weekend activity to keep the kids quiet, plus:</p>
               <ul className={`${lexend.className} list-disc list-inside mb-6`}>
                 <li><strong>10% Discount</strong> on annual subscriptions </li>
                 <li><strong>Be the First to Know</strong> about our launch!</li>
@@ -154,7 +156,6 @@ export default function Hero() {
                   whileTap={{ scale: 0.95 }}
                   type="submit"
                   className={`${lexend.className} w-full bg-[#F2C94C] text-[#333333] font-bold py-2 px-4 rounded hover:bg-[#F2994A] hover:text-white transition-colors duration-300`}
-                  onClick={() => sendGTMEvent({ event: 'button_click', type: 'get_free_tutorial' })}
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? 'Submitting...' : 'Get Free Tutorial'}

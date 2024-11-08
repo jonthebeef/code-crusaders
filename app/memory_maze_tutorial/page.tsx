@@ -155,6 +155,7 @@ export default function MemoryMazeTutorial() {
           <li>Press Edit → "Paste" in the place you want it to go.</li>  
           <li>See if you can learn the keyboard shortcuts! </li>
         </ul>
+        <p><strong>REMEMBER</strong> TO ALWAYS PRESS ENTER TWICE AFTER PASTING CODE </p>
         <CodeBlock code={`Try copying all this text and pasting it into a document.`} language="html"/>
          <p>If you struggle to get it right, keep trying - it&apos;s a very useful way of using a computer to know. And we&apos;re pretty sure a grown up can help you if it&apos;s really difficult!</p>
       </section>
