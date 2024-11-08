@@ -6,6 +6,7 @@ import { X } from 'lucide-react'
 type GtagConsentMode = {
   ad_storage: 'granted' | 'denied'
   analytics_storage: 'granted' | 'denied'
+  functionality_storage: 'granted' | 'denied'  // for Meta Pixel
 }
 
 type CustomWindow = Window & typeof globalThis & {
@@ -19,6 +20,11 @@ type CustomWindow = Window & typeof globalThis & {
     } | GtagConsentMode
   ) => void
   enableMailchimp?: () => void
+  fbq?: (
+    action: string,
+    event: string,
+    params?: Record<string, unknown>
+  ) => void  // Add this line for Meta Pixel
 }
 
 export default function CookieNotice() {
@@ -46,12 +52,16 @@ export default function CookieNotice() {
     if (typeof customWindow.gtag === 'function') {
       const consentMode: GtagConsentMode = {
         ad_storage: 'granted',
-        analytics_storage: 'granted'
+        analytics_storage: 'granted',
+        functionality_storage: 'granted'  // Add this line for Meta Pixel
       }
       customWindow.gtag('consent', 'update', consentMode)
     }
     if (typeof customWindow.enableMailchimp === 'function') {
       customWindow.enableMailchimp()
+    }
+    if (typeof customWindow.fbq === 'function') {
+      customWindow.fbq('consent', 'grant')  // Add this line for Meta Pixel
     }
   }
 
@@ -86,7 +96,7 @@ export default function CookieNotice() {
               id="cookie-description"
               className="text-sm leading-snug mb-3"
             >
-              Our magical cookies power up your Code Crusaders experience. Accept to level up your journey!
+              Our magical cookies power up your Code Crusaders experience with analytics, personalization, and social media features. Accept to level up your journey!
             </p>
           </div>
 
